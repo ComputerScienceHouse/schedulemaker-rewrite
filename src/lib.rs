@@ -64,7 +64,14 @@ impl<R: BufRead> Read for RecordReader<R> {
             if self.current_field >= self.config.field_count {
                 self.current_field = 0;
                 let buffer = std::mem::replace(&mut self.line_buffer, Vec::new());
-                let record = String::from_utf8_lossy(&buffer).trim().replace("\n", "\\n").to_string();
+
+                let record = String::from_utf8_lossy(&buffer)
+                    .trim()
+                    .replace("\n", "\\n")
+                    .split("|")
+                    .map(|field| field.trim())
+                    .collect::<Vec<&str>>()
+                    .join("|");
 
                 let string = if self.push_newline {
                     format!("\n{}", record)
@@ -81,66 +88,30 @@ impl<R: BufRead> Read for RecordReader<R> {
     }
 }
 
-//#[derive(Debug, Deserialize)]
-//pub struct ClassRecord {
-//    course_id: u32,
-//    course_offer_number: u32,
-//    strm: u32,
-//    session_code: String,
-//    class_section: String,
-//    subject: String,
-//    catalog_number: String,
-//    description: String,
-//    topic: String,
-//    class_number: u32,
-//    ssr_component: String,
-//    units: u32,
-//    enrollment_status: char,
-//    class_status: char,
-//    class_type: char,
-//    schedule_print: char,
-//    enrollment_capacity: u32,
-//    enrollment_total: u32,
-//    institution: String,
-//    academic_org: String,
-//    academic_group: String,
-//    academic_career: String,
-//    instruction_mode: String,
-//    course_description_long: String,
-//}
-
 #[derive(Debug, Deserialize)]
 pub struct ClassRecord {
     course_id: u32,
-    course_offer_number: String,
-    strm: String,
+    course_offer_number: u32,
+    strm: u32,
     session_code: String,
     class_section: String,
     subject: String,
     catalog_number: String,
     description: String,
     topic: String,
-    class_number: String,
+    class_number: u32,
     ssr_component: String,
     units: String,
-    enrollment_status: String,
-    class_status: String,
-    class_type: String,
-    schedule_print: String,
-    enrollment_capacity: String,
-    enrollment_total: String,
+    enrollment_status: char,
+    class_status: char,
+    class_type: char,
+    schedule_print: char,
+    enrollment_capacity: u32,
+    enrollment_total: u32,
     institution: String,
     academic_org: String,
     academic_group: String,
     academic_career: String,
     instruction_mode: String,
     course_description_long: String,
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
 }
