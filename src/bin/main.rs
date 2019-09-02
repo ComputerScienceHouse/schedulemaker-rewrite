@@ -1,11 +1,11 @@
 use std::io::BufReader;
 
-use rit_course_parser::{RecordReader, ClassRecord};
+use rit_course_parser::dat::{Reader, ClassRecord, Config};
 
 fn main() {
     let filename = std::env::args().nth(1).expect("should get filename");
     let mut file = std::fs::File::open(&filename).expect("should open file");
-    let mut reader = RecordReader::new(BufReader::new(&mut file));
+    let mut reader = Reader::new(BufReader::new(&mut file), Config::new(24, b'|'));
 
     let mut csv_reader = csv::ReaderBuilder::new()
         .has_headers(false)
