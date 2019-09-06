@@ -44,7 +44,7 @@ impl Config {
 }
 
 impl<R: BufRead> Reader<R> {
-    /// Construct a new DATReader from a Read object to a DAT file and a config.
+    /// Construct a new Reader from a Read object to a DAT file and a config.
     pub fn new(reader: R, config: Config) -> Self {
         Reader {
             reader,
@@ -85,10 +85,10 @@ impl<R: BufRead> Read for Reader<R> {
                 let record = String::from_utf8_lossy(&buffer)
                     .trim()
                     .replace("\n", "\\n")
-                    .split("|")
+                    .split(self.config.delimiter as char)
                     .map(|field| field.trim())
                     .collect::<Vec<&str>>()
-                    .join("|");
+                    .join(std::str::from_utf8(&[self.config.delimiter]).unwrap());
 
                 let string = if self.push_newline {
                     format!("\n{}", record)
