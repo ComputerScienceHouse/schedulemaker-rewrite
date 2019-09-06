@@ -1,6 +1,7 @@
 use std::io::BufReader;
 
-use rit_course_parser::dat::{Reader, ClassRecord, Config};
+use rit_course_parser::dat::{Reader, Config};
+use rit_course_parser::model::ClassRecord;
 
 fn main() {
     let filename = std::env::args().nth(1).expect("should get filename");

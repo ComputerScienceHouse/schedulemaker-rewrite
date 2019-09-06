@@ -1,5 +1,5 @@
 [package]
-name = "course-parser-rs"
+name = "rit-sis-parser"
 version = "0.1.0"
 authors = ["Nick Mosher <nicholastmosher@gmail.com>"]
 edition = "2018"
@@ -11,9 +11,9 @@ serde = { version = "1.0.99", features = ["derive"] }
 csv = "1.1.1"
 
 [lib]
-name = "rit_course_parser"
+name = "rit_sis_parser"
 path = "src/lib.rs"
 
 [[bin]]
-name = "rit-course-parser"
+name = "rit-sis-parser"
 path = "src/bin/main.rs"

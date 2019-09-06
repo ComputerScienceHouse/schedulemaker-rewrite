@@ -7,7 +7,6 @@
 //! Instead, we have to know the number of fields in advance and split
 //! records by counting the fields as we encounter them.
 
-use serde::Deserialize;
 use std::io::{BufRead, Read, Cursor};
 
 /// Given a reader to a DAT file, provides a Read interface that's CSV formatted.
