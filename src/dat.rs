@@ -7,7 +7,7 @@
 //! Instead, we have to know the number of fields in advance and split
 //! records by counting the fields as we encounter them.
 
-use std::io::{BufRead, Read, Cursor};
+use std::io::{BufRead, Cursor, Read};
 
 /// Given a reader to a DAT file, provides a Read interface that's CSV formatted.
 pub struct Reader<R> {
@@ -62,13 +62,19 @@ impl<R: BufRead> Read for Reader<R> {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize, std::io::Error> {
         // Read bytes from the buffered cursor
         let len = self.record_cursor.read(buf)?;
-        if len != 0 { return Ok(len); }
+        if len != 0 {
+            return Ok(len);
+        }
 
         // If the buffered cursor is empty, read a record to fill it
         loop {
             // Read a field at a time by reading until each pipe
-            let len = self.reader.read_until(self.config.delimiter, &mut self.line_buffer)?;
-            if len == 0 { return Ok(0); }
+            let len = self
+                .reader
+                .read_until(self.config.delimiter, &mut self.line_buffer)?;
+            if len == 0 {
+                return Ok(0);
+            }
 
             // Increment the field number we're visiting
             self.current_field += 1;
@@ -79,12 +85,12 @@ impl<R: BufRead> Read for Reader<R> {
                 self.current_field = 0;
 
                 // Swap out the internal buffer with a fresh empty one
-                let buffer = std::mem::replace(&mut self.line_buffer, Vec::new());
+                let buffer = std::mem::take(&mut self.line_buffer);
 
                 // Convert the record buffer to a String and trim all the fields
                 let record = String::from_utf8_lossy(&buffer)
                     .trim()
-                    .replace("\n", "\\n")
+                    .replace('\n', "\\n")
                     .split(self.config.delimiter as char)
                     .map(|field| field.trim())
                     .collect::<Vec<&str>>()
@@ -99,7 +105,7 @@ impl<R: BufRead> Read for Reader<R> {
 
                 // Put the now-formatted data into a Cursor to be read by clients
                 let string_buffer = Cursor::new(string);
-                std::mem::replace(&mut self.record_cursor, string_buffer);
+                self.record_cursor = string_buffer;
                 return self.record_cursor.read(buf);
             }
         }
