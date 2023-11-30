@@ -16,7 +16,7 @@ const Header = () => {
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
           </button>
-          <Link className="navbar-brand" ui-sref="index" to="/">
+          <Link className="navbar-brand" to="/">
             Schedule<strong>Maker</strong>
           </Link>
         </div>
@@ -26,17 +26,17 @@ const Header = () => {
         >
           <ul className="nav navbar-nav">
             <li ui-sref-active="active">
-              <Link ui-sref="generate" to="/generate">
+              <Link to="/generate">
                 <i className="fa fa-calendar-o fa-fw"></i> Make a Schedule
               </Link>
             </li>
             <li ui-sref-active="active">
-              <Link ui-sref="browse" to="/browse">
+              <Link to="/browse">
                 <i className="fa fa-list fa-fw"></i> Browse Courses
               </Link>
             </li>
             <li ui-sref-active="active">
-              <Link ui-sref="search" to="/search">
+              <Link to="/search">
                 <i className="fa fa-search fa-fw"></i> Search Courses
               </Link>
             </li>

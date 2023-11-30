@@ -3,19 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Header from './components/header';
-import Footer from './components/footer';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <div id="superContainer">
-      <div>&nbsp;</div>
-      <div>&nbsp;</div>
-      <Header />
-      <App />
-      <Footer />
-    </div>
+    <App />
   </React.StrictMode>
 );
 

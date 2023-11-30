@@ -21,7 +21,7 @@ const Footer = () => {
           Version: 4.0.0
         </a>{" "}
         |{" "}
-        <Link ui-sref="help" to="/help">
+        <Link to="/help">
           Help
         </Link>{" "}
         | <Link to="/status">Status</Link> |{" "}

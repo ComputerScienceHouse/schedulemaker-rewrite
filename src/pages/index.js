@@ -8,11 +8,11 @@ function Index() {
           <div id="mainMenu" className="row">
             <div className="col-xs-4">
               <div className="navItem">
-                <Link ui-sref="generate" to="/generate">
+                <Link  to="/generate">
                   <i className="fa fa-calendar"></i>
                 </Link>
                 <div>
-                  <Link ui-sref="generate" to="/generate">
+                  <Link to="/generate">
                     Make a Schedule
                   </Link>
                 </div>
@@ -20,11 +20,11 @@ function Index() {
             </div>
             <div className="col-xs-4">
               <div className="navItem">
-                <Link ui-sref="browse" to="/browse">
+                <Link to="/browse">
                   <i className="fa fa-list"></i>
                 </Link>
                 <div>
-                  <Link ui-sref="browse" to="/browse">
+                  <Link to="/browse">
                     Browse Courses
                   </Link>
                 </div>
@@ -32,11 +32,11 @@ function Index() {
             </div>
             <div className="col-xs-4">
               <div className="navItem">
-                <Link ui-sref="search" to="/search">
+                <Link to="/search">
                   <i className="fa fa-search"></i>
                 </Link>
                 <div>
-                  <Link ui-sref="search" to="/search">
+                  <Link to="/search">
                     Search Courses
                   </Link>
                 </div>
