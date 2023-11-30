@@ -1,4 +1,4 @@
-const CourseCart = ({}) => {
+const CourseCart = () => {
   return (
     <>
       <div class="visible-xs visible-sm vert-spacer-static-md"></div>

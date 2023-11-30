@@ -1,4 +1,3 @@
-import Alert from "../components/alert";
 import Reset from "../components/reset";
 import TermSelect from "../components/termselect";
 import SubPage from "./subpage";
@@ -269,33 +268,33 @@ function Search() {
                   </button>
                   <button
                     type="button"
-               
+
                     class="btn btn-default btn-dow"
-                  
+
                   >
                     We
                   </button>
                   <button
                     type="button"
-              
+
                     class="btn btn-default btn-dow "
-                
+
                   >
                     Th
                   </button>
                   <button
                     type="button"
-                
+
                     class="btn btn-default btn-dow"
-           
+
                   >
                     Fr
                   </button>
                   <button
                     type="button"
-                
+
                     class="btn btn-default btn-dow "
-                
+
                   >
                     Sa
                   </button>
@@ -340,7 +339,7 @@ function Search() {
                 <div class="col-sm-4">
                   <button
                     type="button"
-                  
+
                     class="btn btn-default btn-block btn-success"
                   >
                     Online{" "}
@@ -353,7 +352,7 @@ function Search() {
                 <div class="col-sm-4">
                   <button
                     type="button"
-                
+
                     class="btn btn-default btn-block btn-success"
                   >
                     Honors{" "}
@@ -366,7 +365,7 @@ function Search() {
                 <div class="col-sm-4">
                   <button
                     type="button"
-         
+
                     class="btn btn-default btn-block btn-success"
                   >
                     Off Campus{" "}
