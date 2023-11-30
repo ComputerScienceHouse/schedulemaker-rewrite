@@ -2,6 +2,7 @@ import Alert from "../components/alert";
 import Reset from "../components/reset";
 import TermSelect from "../components/termselect";
 import SubPage from "./subpage";
+import { Link } from 'react-router-dom'
 
 function Generate() {
   return (
@@ -11,9 +12,9 @@ function Generate() {
         better. Add courses from the Browse or Search page to your schedule as
         well so you can easily create schedule combinations from anywhere! Also,
         check out the{" "}
-        <a ui-sref="help" href="/help">
+        <Link ui-sref="help" to="/help">
           help
-        </a>{" "}
+        </Link>{" "}
         page for new keyboard shortcuts.
       </Alert>
       <TermSelect title="Generate Schedules">

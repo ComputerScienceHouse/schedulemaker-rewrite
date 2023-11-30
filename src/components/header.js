@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const Header = () => {
   return (
     <header className="main navbar navbar-fixed-top navbar-default ng-scope">
@@ -14,9 +16,9 @@ const Header = () => {
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
           </button>
-          <a className="navbar-brand" ui-sref="index" href="/">
+          <Link className="navbar-brand" ui-sref="index" to="/">
             Schedule<strong>Maker</strong>
-          </a>
+          </Link>
         </div>
         <div
           className="collapse navbar-collapse navbar-right navbar-ex1-collapse"
@@ -24,19 +26,19 @@ const Header = () => {
         >
           <ul className="nav navbar-nav">
             <li ui-sref-active="active">
-              <a ui-sref="generate" href="/generate">
+              <Link ui-sref="generate" to="/generate">
                 <i className="fa fa-calendar-o fa-fw"></i> Make a Schedule
-              </a>
+              </Link>
             </li>
             <li ui-sref-active="active">
-              <a ui-sref="browse" href="/browse">
+              <Link ui-sref="browse" to="/browse">
                 <i className="fa fa-list fa-fw"></i> Browse Courses
-              </a>
+              </Link>
             </li>
             <li ui-sref-active="active">
-              <a ui-sref="search" href="/search">
+              <Link ui-sref="search" to="/search">
                 <i className="fa fa-search fa-fw"></i> Search Courses
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

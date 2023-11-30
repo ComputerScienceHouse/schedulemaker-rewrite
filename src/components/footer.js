@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const Footer = () => {
   return (
     <footer className="main default">
@@ -19,10 +21,10 @@ const Footer = () => {
           Version: 4.0.0
         </a>{" "}
         |{" "}
-        <a ui-sref="help" href="/help">
+        <Link ui-sref="help" to="/help">
           Help
-        </a>{" "}
-        | <a href="/status">Status</a> |{" "}
+        </Link>{" "}
+        | <Link to="/status">Status</Link> |{" "}
         <a
           target="_blank"
           rel="noreferrer"

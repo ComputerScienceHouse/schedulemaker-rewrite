@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function Index() {
   return (
     <div id="container">
@@ -6,37 +8,37 @@ function Index() {
           <div id="mainMenu" className="row">
             <div className="col-xs-4">
               <div className="navItem">
-                <a ui-sref="generate" href="/generate">
+                <Link ui-sref="generate" to="/generate">
                   <i className="fa fa-calendar"></i>
-                </a>
+                </Link>
                 <div>
-                  <a ui-sref="generate" href="/generate">
+                  <Link ui-sref="generate" to="/generate">
                     Make a Schedule
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
             <div className="col-xs-4">
               <div className="navItem">
-                <a ui-sref="browse" href="/browse">
+                <Link ui-sref="browse" to="/browse">
                   <i className="fa fa-list"></i>
-                </a>
+                </Link>
                 <div>
-                  <a ui-sref="browse" href="/browse">
+                  <Link ui-sref="browse" to="/browse">
                     Browse Courses
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
             <div className="col-xs-4">
               <div className="navItem">
-                <a ui-sref="search" href="/search">
+                <Link ui-sref="search" to="/search">
                   <i className="fa fa-search"></i>
-                </a>
+                </Link>
                 <div>
-                  <a ui-sref="search" href="/search">
+                  <Link ui-sref="search" to="/search">
                     Search Courses
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

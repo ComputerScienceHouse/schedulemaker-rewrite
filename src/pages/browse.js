@@ -2,6 +2,7 @@ import Alert from "../components/alert";
 import Reset from "../components/reset";
 import TermSelect from "../components/termselect";
 import SubPage from "./subpage";
+import { Link } from 'react-router-dom'
 
 function Browse() {
   return (
@@ -9,9 +10,9 @@ function Browse() {
       <Alert>
         Once you've found some courses you like, simply add them to your cart, 
         they will be included in your possible schedules. Also, check out the{" "}
-        <a ui-sref="help" href="/help">
+        <Link ui-sref="help" to="/help">
           help
-        </a>{" "}
+        </Link>{" "}
         for more info.
       </Alert>
       <TermSelect title="Browse Courses">
