@@ -31,7 +31,7 @@ const Footer = () => {
           Report Issues
         </a>
         <div>
-          Development v4: Mary Strodl (mstrodl at csh.rit.edu), Sam Cordy (samc
+          Development v4: Mary Strodl (mstrodl at csh.rit.edu), Sam Cordry (samc
           at csh.rit.edu), Joe Abbate (skyz at csh.rit.edu)
           <br />
           Development v3.1: Devin Matte (matted at csh.rit.edu)
