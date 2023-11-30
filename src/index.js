@@ -10,6 +10,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <div id="superContainer">
+      <div>&nbsp;</div>
+      <div>&nbsp;</div>
       <Header />
       <App />
       <Footer />

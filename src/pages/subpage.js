@@ -14,6 +14,7 @@ const SubPage = (props) => {
                     </div>
                 </div>
             </div>
+            <div class="vert-spacer-static-md"></div>
         </div>
     );
 }
