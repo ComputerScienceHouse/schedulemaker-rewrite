@@ -366,11 +366,11 @@ function Search() {
                   <button
                     type="button"
 
-                    class="btn btn-default btn-block btn-success"
+                    class="btn btn-default btn-block"
                   >
                     Off Campus{" "}
                     <i
-                      class="fa fa-square-o fa-check-square"
+                      class="fa fa-square-o"
                     ></i>
                   </button>
                 </div>
