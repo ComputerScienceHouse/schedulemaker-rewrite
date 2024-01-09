@@ -1,6 +1,7 @@
 /target
 **/*.rs.bk
 .env
+db_data/
 
 .idea/
 .vscode/
