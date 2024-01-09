@@ -4,6 +4,7 @@ use sqlx::{prelude::*, Pool, Postgres, QueryBuilder};
 use std::io::BufReader;
 
 const BIND_LIMIT: usize = 65535;
+// TODO: add verbose logging
 
 pub async fn import(pool: &Pool<Postgres>) -> Result<(), sqlx::Error> {
     let mut connection = pool.acquire().await?;

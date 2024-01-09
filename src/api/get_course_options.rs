@@ -4,7 +4,7 @@ use crate::model::{ClassStatus, EnrollmentStatus, SchedulePrint, WeekdaySchedule
 use actix_web::{post, web, HttpResponse, Responder, ResponseError};
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize, Serializer};
-use sqlx::FromRow;
+use sqlx::{FromRow, QueryBuilder, Postgres};
 use std::collections::HashMap;
 use std::fmt;
 
@@ -84,6 +84,14 @@ pub struct Search {
     course: String,
     term: i32,
     ignore_full: bool,
+    credit_hours: i32,
+    title: String,
+    professor_name: String,
+    keywords: Vec<String>,
+    days: Vec<bool>,
+    online: bool,
+    honors: bool,
+    off_campus: bool,
 }
 
 #[derive(Debug)]
@@ -147,11 +155,10 @@ struct DatabaseCourseOption {
 #[post("/generate/getCourseOpts")]
 pub async fn get_course_options(options: web::Form<Search>) -> impl Responder {
     let rit_term = ((options.term / 10000) * 1000) + (options.term % 1000);
-    println!("Rit_term: {rit_term}");
-    //  WHERE (subject || '-' || catalog_number || '-' || class_section) = ?
-    let candidate_classes = sqlx::query_as!(
-        DatabaseCourseOption,
-        "SELECT classes.course_id,
+
+    let course_number: String = format!("{}%", options.course);
+    let stem = format!("
+        SELECT classes.course_id,
             classes.course_offer_number,
             classes.academic_term,
             classes.session_code,
@@ -206,13 +213,47 @@ pub async fn get_course_options(options: web::Form<Search>) -> impl Responder {
             classes.class_section = instructors.class_section AND
             meetings.class_meeting_number = instructors.class_meeting_number
         WHERE
-            (classes.subject || '-' || classes.catalog_number || '-' || classes.class_section) LIKE $1 AND
-            classes.academic_term = $2",
-        format!("{}%", options.course),
-        rit_term
-    )
-    .fetch_all(get_pool().await?)
-    .await?;
+            (classes.subject || '-' || classes.catalog_number || '-' || classes.class_section) LIKE {course_number} AND
+            classes_academic_term = {rit_term}
+    ");
+
+    let mut query_builder: QueryBuilder<Postgres> = QueryBuilder::new(&stem);
+
+    if !options.ignore_full {
+        query_builder.push(format!("AND classes.enrollment_status = {:?}", EnrollmentStatus::Open));
+    }
+
+    if options.credit_hours != -1 {
+        query_builder.push(format!("AND classes.units = {}.00", options.credit_hours));
+    }
+
+    if options.title != "" {
+        query_builder.push(format!("AND classes.description LIKE {}", options.title));
+    }
+
+    if options.professor_name != "" {
+        query_builder.push(format!("AND (instructors.first_name || instructors.last_name) LIKE {}", options.professor_name));
+    }
+
+    // TODO: implement keywords
+
+    // TODO: implement days
+
+    if !options.online {
+        query_builder.push("AND NOT meetings.building = \"ONLINE\" AND NOT meetings.room_number = \"ONLINE\"");
+    }
+
+    if !options.honors {
+        query_builder.push("AND NOT classes.description LIKE \"Honors\"");
+    }
+
+    if !options.off_campus {
+        query_builder.push("AND NOT meetings.building = \"OFFC\" AND NOT meetings.room_number = \"OFFC\"");
+    }
+
+    let query = query_builder.build_query_as::<DatabaseCourseOption>();
+    let candidate_classes = query.fetch_all(get_pool().await?).await?;
+
     let course_options = candidate_classes
         .into_iter()
         .map(|course| {
@@ -244,7 +285,6 @@ pub async fn get_course_options(options: web::Form<Search>) -> impl Responder {
                             day: WeekDay::$Day,
                             end: time_str_to_minutes(&course.meeting_time_end),
                             start: time_str_to_minutes(&course.meeting_time_start),
-                            // TODO
                             off_campus: false,
                             room: course.room_number.clone(),
                         });
