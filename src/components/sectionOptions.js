@@ -58,6 +58,7 @@ const sectionOptions = (props) => {
                   >
                     <a
                       target="_blank"
+                      rel="noreferrer"
                       href="http://www.ratemyprofessors.com/search.jsp?queryBy=teacherName&amp;queryoption=HEADER&amp;query=Bruce%20Herring&amp;facetSearch=true&amp;schoolName=rochester+institute+of+technology"
                     >
                       {props.options[i].instructor}

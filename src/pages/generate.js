@@ -6,7 +6,7 @@ import ScheduleCourse from "../components/scheduleCourse";
 import NonCourse from "../components/nonCourse";
 import NoCourse from "../components/noCourse";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 function Generate() {
