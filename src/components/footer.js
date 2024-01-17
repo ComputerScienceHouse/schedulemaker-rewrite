@@ -8,7 +8,7 @@ const Footer = () => {
           <a target="_blank" rel="noreferrer" href="https://www.csh.rit.edu/">
             <img
               width="90"
-              src="//schedulemaker.csh.rit.edu/img/csh_logo_square.svg"
+              src="./csh_logo_square.svg"
               alt="CSH"
             />
           </a>
@@ -33,18 +33,19 @@ const Footer = () => {
           Report Issues
         </a>
         <div>
-          Development v4: Mary Strodl (mstrodl at csh.rit.edu), Sam Cordry (samc
-          at csh.rit.edu), Joe Abbate (skyz at csh.rit.edu)
+          Development v4: Sam Cordry (samc@csh.rit.edu), Joe Abbate (skyz@csh.rit.edu)
           <br />
-          Development v3.1: Devin Matte (matted at csh.rit.edu)
+          Development v3.4: Mary Strodl (mstrodl@csh.rit.edu)
           <br />
-          Development v3: Ben Grawi (bgrawi at csh.rit.edu)
+          Development v3.1-3.3: Devin Matte (matted@csh.rit.edu)
           <br />
-          Development v2: Ben Russell (benrr101 at csh.rit.edu)
+          Development v3: Ben Grawi (bgrawi@csh.rit.edu)
           <br />
-          Idea: John Resig (phytar at csh.rit.edu)
+          Development v2: Ben Russell (benrr101@csh.rit.edu)
           <br />
-          Hosting: <a href="https://www.csh.rit.edu/">Computer Science House</a>
+          Idea: John Resig (phytar@csh.rit.edu)
+          <br />
+          Hosting: <a href="https://www.csh.rit.edu">Computer Science House</a>
           <br />
         </div>
       </div>
