@@ -1,5 +1,5 @@
 [package]
-name = "rit-sis-parser"
+name = "schedulemaker"
 version = "0.1.0"
 authors = ["Nick Mosher <nicholastmosher@gmail.com>"]
 edition = "2021"

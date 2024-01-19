@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+
 function minutesToTime(mins) {
   var h = Math.floor(mins / 60);
   var m = mins % 60;
@@ -86,10 +89,10 @@ const NoCourse = () => {
       <div class="col-sm-1">
         <div class="container-fluid">
           <button type="button" class="btn btn-danger hidden-xs">
-            <i class="fa fa-times"></i>
+            <FontAwesomeIcon icon={icon({name: "times"})}/>
           </button>{" "}
           <button type="button" class="btn btn-danger btn-block visible-xs">
-            <i class="fa fa-times"></i> Delete
+            <FontAwesomeIcon icon={icon({name: "times"})}/> Delete
           </button>
         </div>
       </div>

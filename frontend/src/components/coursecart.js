@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+
 const CourseCart = () => {
   return (
     <>
@@ -8,7 +11,7 @@ const CourseCart = () => {
             <div class="row form-horizontal hidden-sm hidden-xs">
               <div class="col-md-8">
                 <div class="pull-left">
-                  <i class="fa fa-shopping-cart course-cart-logo"></i>
+                  <FontAwesomeIcon icon={icon({name: "shopping-cart"})} class="course-cart-logo"/>
                 </div>
                 <h2 class="panel-title control-label pull-left">Course Cart</h2>
               </div>
@@ -18,8 +21,8 @@ const CourseCart = () => {
                   class="btn btn-danger pull-right"
                   disabled="disabled"
                 >
-                  <i class="fa fa-minus"></i>
-                  <i class="fa fa-shopping-cart"></i> All
+                  <FontAwesomeIcon icon={icon({name: "minus"})}/>
+                  <FontAwesomeIcon icon={icon({name: "shopping-cart"})}/> All
                 </button>
               </div>
             </div>
@@ -30,7 +33,7 @@ const CourseCart = () => {
               type="button"
               class="btn btn-xs btn-primary hidden-md hidden-lg pull-right"
             >
-              <i class="fa fa-angle-down" style={null}></i>
+              <FontAwesomeIcon icon={icon({name: "angle-down"})} style={null}/>
             </button>
           </h2>
         </div>
@@ -47,7 +50,7 @@ const CourseCart = () => {
         </div>
         <div class="panel-footer">
           <button type="button" class="btn btn-primary btn-block">
-            Show Matching Schedules <i class="fa fa-chevron-right"></i>
+            Show Matching Schedules <FontAwesomeIcon icon={icon({name: "chevron-right"})}/>
           </button>
         </div>
       </div>

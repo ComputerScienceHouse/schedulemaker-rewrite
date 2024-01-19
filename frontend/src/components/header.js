@@ -1,4 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom'
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 const Header = () => {
   return (
@@ -27,17 +29,17 @@ const Header = () => {
           <ul className="nav navbar-nav">
             <li ui-sref-active="active">
               <Link to="/generate">
-                <i className="fa fa-calendar-o fa-fw"></i> Make a Schedule
+                <FontAwesomeIcon icon={icon({name: "calendar-days", style: 'regular'})}/> Make a Schedule
               </Link>
             </li>
             <li ui-sref-active="active">
               <Link to="/browse">
-                <i className="fa fa-list fa-fw"></i> Browse Courses
+                <FontAwesomeIcon icon={icon({name: "list"})}/> Browse Courses
               </Link>
             </li>
             <li ui-sref-active="active">
               <Link to="/search">
-                <i className="fa fa-search fa-fw"></i> Search Courses
+                <FontAwesomeIcon icon={icon({name: "search"})}/> Search Courses
               </Link>
             </li>
           </ul>

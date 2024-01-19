@@ -7,6 +7,8 @@ import NonCourse from "../components/nonCourse";
 import NoCourse from "../components/noCourse";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 
 function Generate() {
@@ -49,7 +51,7 @@ function Generate() {
           <div class="row">
             <div class="col-md-4 col-xs-6">
               <button type="button" class="btn-default btn btn-block">
-                <i class="fa fa-square-o"></i> Ignore full
+              <FontAwesomeIcon icon={icon({name: "square", style: "regular"})}/> Ignore full
               </button>
             </div>
             <div class="col-md-4 col-md-offset-4 col-xs-6">
@@ -59,7 +61,7 @@ function Generate() {
                 title="Shortcut: Enter"
                 onClick={() => setCourses([...courses, <ScheduleCourse />])}
               >
-                <i class="fa fa-plus"></i> Add Course
+                <FontAwesomeIcon icon={icon({name: "plus"})}/> Add Course
               </button>
             </div>
           </div>
@@ -82,7 +84,7 @@ function Generate() {
             <div class="row">
               <div class="col-md-4 col-md-offset-8">
                 <button type="button" class="btn btn-block btn-primary" onClick={() => setNonSchedule([...nonSchedule, <NonCourse/>])}>
-                  <i class="fa fa-plus"></i> Add Item
+                  <FontAwesomeIcon icon={icon({name: "plus"})}/> Add Item
                 </button>
               </div>
             </div>
@@ -103,7 +105,7 @@ function Generate() {
             <div class="row">
               <div class="col-md-4 col-md-offset-8">
                 <button type="button" class="btn btn-block btn-primary" onClick={() => setNoSchedule([...noSchedule, <NoCourse/>])}>
-                  <i class="fa fa-plus"></i> Add Item
+                  <i class="plus"></i> Add Item
                 </button>
               </div>
             </div>

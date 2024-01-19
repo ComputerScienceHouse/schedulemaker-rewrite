@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+
 const numToDay = {
     0: "Sun",
     1: "Mon",
@@ -88,10 +91,10 @@ const sectionOptions = (props) => {
                       ng-class="{'btn-danger':section.selected, 'btn-success':!section.selected}"
                     >
                       <i
-                        class="fa fa-minus"
+                        class="minus"
                         ng-class="{'fa-minus':section.selected, 'fa-plus':!section.selected}"
                       ></i>{" "}
-                      <i class="fa fa-shopping-cart"></i>
+                      <FontAwesomeIcon icon={icon({name: "shopping-cart"})}/>
                     </button>
                   </div>
                 </div>
@@ -101,7 +104,7 @@ const sectionOptions = (props) => {
                     style={{background: "#ddd", margin: "8px 0"}}
                     title="Other students enrolled as of 6AM today"
                   >
-                    {props.options[i].curenroll}/{props.options[i].maxenroll} <i class="fa fa-user"></i>
+                    {props.options[i].curenroll}/{props.options[i].maxenroll} <FontAwesomeIcon icon={icon({name: "user"})}/>
                   </div>
                 </div>
               </div>

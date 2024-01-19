@@ -1,8 +1,10 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Alert from "../components/alert";
 import Reset from "../components/reset";
 import TermSelect from "../components/termselect";
 import SubPage from "./subpage";
 import { Link } from 'react-router-dom'
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 function Browse() {
   return (
@@ -21,7 +23,7 @@ function Browse() {
                 <div class="list-group-item">
                     <div class="browse-heading">
                         <button class="btn pull-left btn-default">
-                            <i class="fa fa-plus" ng-class="school.ui.buttonClass"></i>
+                            <FontAwesomeIcon icon={icon({name: "plus"})}/>
                         </button>
                         <h4 class="list-group-item-heading ng-binding">CAD</h4>
                         <p class="list-group-item-text ng-binding">College of Art and Design</p>
@@ -30,7 +32,7 @@ function Browse() {
                 <div class="list-group-item active">
                     <div class="browse-heading">
                         <button class="btn pull-left btn-default">
-                            <i class="fa fa-minus" ng-class="school.ui.buttonClass"></i>
+                            <FontAwesomeIcon icon={icon({name: "minus"})}/>
                         </button>
                         <h4 class="list-group-item-heading">CAD</h4>
                         <p class="list-group-item-text">College of Art and Design</p>
@@ -41,7 +43,7 @@ function Browse() {
                                 <div class="list-group-item">
                                     <div class="browse-heading">
                                         <button class="btn pull-left btn-default">
-                                            <i class="fa fa-plus" ng-class="school.ui.buttonClass"></i>
+                                            <FontAwesomeIcon icon={icon({name: "plus"})}/>
                                         </button>
                                         <h4 class="list-group-item-heading">CAD</h4>
                                         <p class="list-group-item-text">College of Art and Design</p>

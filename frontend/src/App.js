@@ -10,8 +10,6 @@ function App() {
   return (
     <Router>
       <div id="superContainer">
-        <div>&nbsp;</div>
-        <div>&nbsp;</div>
         <Header />
         <Routes>
           <Route path="/" element={<Index />} />

@@ -1,0 +1,27 @@
+version: '3.3'
+services:
+  caddy:
+    image: caddy:latest
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - 8080:8080
+    networks:
+      - proxy
+    depends_on:
+      - frontend
+      - backend
+  frontend:
+    build: ./frontend
+    ports:
+      - 8081:8080
+    networks:
+      - proxy
+  backend:
+    build: ./backend
+    environment:
+      - DATABASE_URL= 
+    networks:
+      - proxy
+networks:
+  proxy:

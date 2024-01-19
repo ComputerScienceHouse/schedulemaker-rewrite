@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import getCourseChildren from "../components/courseChildren";
 import SectionOptions from "../components/sectionOptions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 const EnterCourse = (
   <button
@@ -9,7 +11,7 @@ const EnterCourse = (
     class="btn btn-primary btn-block"
     disabled="disabled"
   >
-    <i class="fa"></i> Please enter a course
+    Please enter a course
   </button>
 );
 
@@ -19,14 +21,14 @@ const NoMatches = (
 
 const CourseResults = (props) => {
   let action = props.opened ? "Hide" : "Show";
-  let icon = props.opened ? "fa fa-angle-up" : "fafa-angle-down"
+  let icon = props.opened ? "angle-up" : "angle-down"
   return (
     <button
       title="Shortcut: Ctrl + Alt + Down"
       type="button"
       class="btn btn-primary btn-block"
     >
-      <i class={icon}></i> {action} {props.num} Results
+      <FontAwesomeIcon icon={icon({name: icon})}/> {action} {props.num} Results
     </button>
   );
 };
@@ -36,7 +38,7 @@ const ScheduleCourse = () => {
   const [courseStatus, setCourseStatus] = useState(EnterCourse);
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadIcon, setLoadIcon] = useState("fa fa-times");
+  const [loadIcon, setLoadIcon] = useState(icon({name: "times"}));
 
   const updateCourse = (e) => {
     setCourseData(e.target.value);
@@ -69,9 +71,9 @@ const ScheduleCourse = () => {
 
   useEffect(() => {
     if (loading) {
-      setLoadIcon("fa fa-spin fa-refresh");
+      setLoadIcon(icon({name: "rotate"}));
     } else {
-      setLoadIcon("fa fa-times");
+      setLoadIcon(icon({name: "times"}));
     }
   }, [loading]);
 
@@ -100,7 +102,7 @@ const ScheduleCourse = () => {
                     type="button"
                     class="btn btn-default"
                   >
-                    <i class={loadIcon}></i>
+                    <FontAwesomeIcon icon={loadIcon}/>
                   </button>
                 </span>
               </div>
