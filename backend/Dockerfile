@@ -1,17 +1,33 @@
-FROM rust:1.70-slim-buster
+# STAGE1: Build the binary
+FROM rust:alpine as builder
 
+# Install build dependencies
+RUN apk add --no-cache build-base musl-dev openssl-dev openssl pkgconfig openssl-libs-static
+
+# Create a new empty shell project
 WORKDIR /app
 
-RUN apt-get update && apt-get -y install libssl-dev pkg-config libglib2.0-dev
+# Copy over the Cargo.toml files to the shell project
+COPY Cargo.toml Cargo.lock ./
 
-RUN cargo init .
+# Build and cache the dependencies
+RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN cargo fetch
+RUN cargo build --release
+RUN rm src/main.rs
 
-COPY Cargo.* ./
-
+# Copy the actual code files and build the application
+COPY migrations ./migrations/
+COPY src ./src/
+# Update the file date
+RUN touch src/main.rs
 RUN cargo build --release
 
-COPY src/ src/
+# STAGE2: create a slim image with the compiled binary
+FROM alpine as runner
 
-RUN cargo build --release
+# Copy the binary from the builder stage
+WORKDIR /app
+COPY --from=builder /app/target/release/schedulemaker schedulemaker
 
-CMD ["./target/release/schedulemaker", "serve"]
+CMD ["./schedulemaker", "serve"]

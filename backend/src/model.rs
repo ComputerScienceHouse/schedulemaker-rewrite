@@ -10,6 +10,7 @@
 
 use serde::{Deserialize, Serialize};
 use sqlx::{query_builder::Separated, FromRow, Postgres};
+use utoipa::ToSchema;
 use std::fmt::Display;
 
 pub trait ToRow {
@@ -103,12 +104,12 @@ pub struct ClassRecord {
 }
 
 /// Represents whether a class has available seats or is full.
-#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone)]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema)]
 pub enum ClassStatus {
     #[serde(rename = "A")]
     Available,
     #[serde(rename = "X")]
-    Full,
+    Cancelled,
 }
 
 impl Default for ClassStatus {
@@ -118,7 +119,7 @@ impl Default for ClassStatus {
 }
 
 /// Represents whether a course is open for enrollment or not.
-#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone)]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema)]
 pub enum EnrollmentStatus {
     #[serde(rename = "O")]
     Open,
@@ -132,7 +133,7 @@ impl Default for EnrollmentStatus {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone)]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema)]
 pub enum SchedulePrint {
     #[serde(rename = "Y")]
     Visible,
@@ -172,7 +173,7 @@ pub struct MeetingRecord {
 }
 
 /// Whether a given day of the week is part of a course section's schedule.
-#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone)]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema)]
 pub enum WeekdayScheduled {
     #[serde(rename = "Y")]
     Scheduled,
