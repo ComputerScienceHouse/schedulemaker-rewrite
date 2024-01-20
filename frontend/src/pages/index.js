@@ -11,7 +11,7 @@ function Index() {
             <div className="col-xs-4">
               <div className="navItem">
                 <Link  to="/generate">
-                  <FontAwesomeIcon icon={icon({name: 'calendar-days', style: 'regular'})} size="10x"/>
+                  <FontAwesomeIcon icon={icon({name: 'calendar', style: 'regular'})} size="10x"/>
                 </Link>
                 <div>
                   <Link to="/generate">

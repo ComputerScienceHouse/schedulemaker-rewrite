@@ -29,7 +29,7 @@ const Header = () => {
           <ul className="nav navbar-nav">
             <li ui-sref-active="active">
               <Link to="/generate">
-                <FontAwesomeIcon icon={icon({name: "calendar-days", style: 'regular'})}/> Make a Schedule
+                <FontAwesomeIcon icon={icon({name: "calendar", style: 'regular'})}/> Make a Schedule
               </Link>
             </li>
             <li ui-sref-active="active">
