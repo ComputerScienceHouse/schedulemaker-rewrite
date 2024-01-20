@@ -13,14 +13,11 @@ services:
       - backend
   frontend:
     build: ./frontend
-    ports:
-      - 8081:8080
     networks:
       - proxy
   backend:
     build: ./backend
-    environment:
-      - DATABASE_URL= 
+    env_file: .env
     networks:
       - proxy
 networks:
