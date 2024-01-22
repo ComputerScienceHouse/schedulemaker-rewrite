@@ -21,43 +21,47 @@ const NoMatches = (
 
 const CourseResults = (props) => {
   let action = props.opened ? "Hide" : "Show";
-  let icon = props.opened ? "angle-up" : "angle-down"
+  let openedIcon = props.opened ? icon({name: "angle-up"}) : icon({name: "angle-down"})
   return (
     <button
       title="Shortcut: Ctrl + Alt + Down"
       type="button"
       class="btn btn-primary btn-block"
     >
-      <FontAwesomeIcon icon={icon({name: icon})}/> {action} {props.num} Results
+      <FontAwesomeIcon icon={openedIcon}/> {action} {props.num} Results
     </button>
   );
 };
 
-const ScheduleCourse = () => {
+const ScheduleCourse = (props) => {
   const [courseData, setCourseData] = useState("");
   const [courseStatus, setCourseStatus] = useState(EnterCourse);
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadIcon, setLoadIcon] = useState(icon({name: "times"}));
+  const [loadIcon, setLoadIcon] = useState(<FontAwesomeIcon icon={icon({name: "times"})}/>);
 
   const updateCourse = (e) => {
     setCourseData(e.target.value);
   };
 
   useEffect(() => {
+    console.log(props.activeTerm)
+  }, [props.activeTerm]);
+
+  useEffect(() => {
     if (courseData.length >= 4) {
       const fetchData = async () => {
         let courseChildren = await getCourseChildren({
-          term: 20235,
+          term: props.activeTerm,
           course: courseData,
           ignoreFull: false,
         }, setLoading);
-        console.log(typeof courseChildren);
         setOptions(courseChildren);
       }
       fetchData();
     }
-  }, [courseData]);
+    setOptions([]);
+  }, [courseData, props.activeTerm]);
 
   useEffect(() => {
     if (courseData.length < 4) {
@@ -71,9 +75,9 @@ const ScheduleCourse = () => {
 
   useEffect(() => {
     if (loading) {
-      setLoadIcon(icon({name: "rotate"}));
+      setLoadIcon(<FontAwesomeIcon icon={icon({name: "rotate"})} spin/>);
     } else {
-      setLoadIcon(icon({name: "times"}));
+      setLoadIcon(<FontAwesomeIcon icon={icon({name: "times"})}/>);
     }
   }, [loading]);
 
@@ -102,7 +106,7 @@ const ScheduleCourse = () => {
                     type="button"
                     class="btn btn-default"
                   >
-                    <FontAwesomeIcon icon={loadIcon}/>
+                    {loadIcon}
                   </button>
                 </span>
               </div>

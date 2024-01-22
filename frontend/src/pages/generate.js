@@ -6,7 +6,7 @@ import ScheduleCourse from "../components/scheduleCourse";
 import NonCourse from "../components/nonCourse";
 import NoCourse from "../components/noCourse";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
@@ -15,6 +15,7 @@ function Generate() {
   const [courses, setCourses] = useState([<ScheduleCourse />]);
   const [nonSchedule, setNonSchedule] = useState([]);
   const [noSchedule, setNoSchedule] = useState([]);
+  const [activeTerm, setActiveTerm] = useState(-1);
   return (
     <SubPage>
       <Alert>
@@ -27,7 +28,7 @@ function Generate() {
         </Link>{" "}
         page for new keyboard shortcuts.
       </Alert>
-      <TermSelect title="Generate Schedules">
+      <TermSelect title="Generate Schedules" setActiveTerm={setActiveTerm}>
         <div className="panel-body">
           <div id="scheduleCourses">
             <div
@@ -36,7 +37,7 @@ function Generate() {
               use-class="scheduleCourse"
               helpers="courses_helpers"
             >
-              {courses}
+              {React.Children.map(courses, course => React.cloneElement(course, {activeTerm}))}
             </div>
           </div>
         </div>

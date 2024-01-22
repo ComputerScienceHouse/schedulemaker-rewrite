@@ -1930,6 +1930,7 @@ dependencies = [
  "clap",
  "csv",
  "dotenvy",
+ "itertools",
  "lazy_static",
  "serde",
  "serde_json",

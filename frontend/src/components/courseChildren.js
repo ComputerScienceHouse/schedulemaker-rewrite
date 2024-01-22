@@ -5,7 +5,6 @@ const getCourseChildren = async (searchData, setLoading) => {
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify(searchData),
     }).then((res) => {
-        console.log(res);
         if (res.status === 200) {
             return res.json();
         } else {

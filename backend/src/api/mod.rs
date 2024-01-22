@@ -1,8 +1,10 @@
 use actix_web::{
+    body::BoxBody,
     web::{self, scope},
-    App, HttpServer, HttpResponse, body::BoxBody,
+    App, HttpResponse, HttpServer,
 };
 mod get_course_options;
+mod term;
 use actix_cors::Cors;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
@@ -16,6 +18,7 @@ use crate::model;
 #[openapi(
         paths(
             get_course_options::get_course_options,
+            term::get_term,
         ),
         components(
             schemas(
@@ -28,6 +31,8 @@ use crate::model;
                 model::WeekdayScheduled,
                 model::ClassStatus,
                 model::EnrollmentStatus,
+                model::SchedulePrint,
+                term::Term,
             )
         ),
         tags(
@@ -46,8 +51,11 @@ pub async fn serve() {
         App::new().wrap(cors).service(
             scope("/api")
                 .service(get_course_options::get_course_options)
+                .service(term::get_term)
                 .route("/openapi.json", web::get().to(open_api_spec))
-                .service(SwaggerUi::new("/docs/{_:.*}").url("/api/openapi.json", ApiDoc::openapi())),
+                .service(
+                    SwaggerUi::new("/docs/{_:.*}").url("/api/openapi.json", ApiDoc::openapi()),
+                ),
         )
     })
     .bind(("0.0.0.0", 8080))

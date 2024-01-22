@@ -34,8 +34,8 @@ const sectionOptions = (props) => {
   let out = [];
   for (let i = 0; i < props.options.length; i++) {
     let days = props.options[i].times.map((time) => numToDay[time.day]).toString();
-    let start = minutesToTime(props.options[i].times[0].start);
-    let end = minutesToTime(props.options[i].times[0].end);
+    let start = days.length > 0 ? minutesToTime(props.options[i].times[0].start) : "N/A";
+    let end = days.length > 0 ? minutesToTime(props.options[i].times[0].end) : "N/A";
     out.push(
       <div
         class="inline-col col-md-6 ng-scope"
@@ -76,7 +76,7 @@ const sectionOptions = (props) => {
                   >
                     {days}{" "}
                     <span style={{"white-space":"nowrap"}} class="ng-binding">
-                      {start}-{end}
+                      {days.length > 0 ? `${start} - ${end}` : ""}
                     </span>
                   </div>
                 </div>

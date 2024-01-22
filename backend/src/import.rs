@@ -51,6 +51,14 @@ pub async fn import(pool: &Pool<Postgres>) -> Result<(), sqlx::Error> {
                     .execute(&mut **transaction)
                     .await?;
 
+                sqlx::query("DELETE FROM meetings")
+                    .execute(&mut **transaction)
+                    .await?;
+
+                sqlx::query("DELETE FROM instructors")
+                    .execute(&mut **transaction)
+                    .await?;
+
                 read_data!("./data/cshclass.dat", "classes", ClassRecord);
                 read_data!("./data/cshmtgpat.dat", "meetings", MeetingRecord);
                 read_data!("./data/cshinstr.dat", "instructors", InstructorRecord);

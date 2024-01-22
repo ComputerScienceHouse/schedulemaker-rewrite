@@ -10,8 +10,8 @@
 
 use serde::{Deserialize, Serialize};
 use sqlx::{query_builder::Separated, FromRow, Postgres};
-use utoipa::ToSchema;
 use std::fmt::Display;
+use utoipa::ToSchema;
 
 pub trait ToRow {
     fn keys() -> &'static [&'static str];

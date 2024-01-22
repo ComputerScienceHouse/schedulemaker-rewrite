@@ -18,6 +18,7 @@ RUN rm src/main.rs
 
 # Copy the actual code files and build the application
 COPY migrations ./migrations/
+COPY .sqlx ./.sqlx/
 COPY src ./src/
 # Update the file date
 RUN touch src/main.rs
