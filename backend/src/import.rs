@@ -54,6 +54,7 @@ pub async fn import(pool: &Pool<Postgres>) -> Result<(), sqlx::Error> {
                 read_data!("./data/cshclass.dat", "classes", ClassRecord);
                 read_data!("./data/cshmtgpat.dat", "meetings", MeetingRecord);
                 read_data!("./data/cshinstr.dat", "instructors", InstructorRecord);
+
                 Ok(()) as Result<(), sqlx::Error>
             })
         })

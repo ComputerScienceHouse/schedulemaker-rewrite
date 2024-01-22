@@ -4,7 +4,7 @@ use crate::model::{ClassStatus, EnrollmentStatus, SchedulePrint, WeekdaySchedule
 use actix_web::{post, web, HttpResponse, Responder, ResponseError};
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize, Serializer};
-use sqlx::{FromRow, Postgres, QueryBuilder};
+use sqlx::{FromRow, QueryBuilder, Postgres};
 use std::collections::HashMap;
 use std::fmt;
 use utoipa::ToSchema;
@@ -21,9 +21,8 @@ lazy_static! {
         HashMap::from([("070".to_owned(), "GOL")]);
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
-#[derive(ToSchema)]
 pub struct CourseOption {
     course_id: String,
     course_num: String,
@@ -41,9 +40,8 @@ pub struct CourseOption {
     raw: DatabaseCourseOption,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
-#[derive(ToSchema)]
 pub struct Time {
     #[serde(rename = "bldg")]
     building: Building,
@@ -74,17 +72,15 @@ pub enum WeekDay {
     Saturday,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
-#[derive(ToSchema)]
 pub struct Building {
     code: String,
     number: String,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
-#[derive(ToSchema)]
 pub struct Search {
     course: String,
     term: i32,
@@ -96,7 +92,7 @@ pub struct Search {
     days: Option<Vec<bool>>,
     online: Option<bool>,
     honors: Option<bool>,
-    off_campus: Option<bool>
+    off_campus: Option<bool>,
 }
 
 #[derive(Debug)]
@@ -139,7 +135,7 @@ pub struct DatabaseCourseOption {
     academic_career: String,
     instruction_mode: String,
     course_description_long: String,
-    class_meeting_number: Option<i32>,
+    class_meeting_number: i32,
     start_date: String,
     end_date: String,
     building: String,
@@ -231,38 +227,51 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
 
     let mut query_builder: QueryBuilder<Postgres> = QueryBuilder::new(stem);
     query_builder.push_bind(course_number);
+
     query_builder.push(" AND classes.academic_term = ");
     query_builder.push_bind(rit_term);
+
     if options.ignore_full {
-        query_builder.push(
-            " AND classes.enrollment_status = "
-        );
+        query_builder.push(" AND classes.enrollment_status = ");
         query_builder.push_bind(EnrollmentStatus::Open);
     }
 
     if let Some(credit_hours) = options.credit_hours {
-        query_builder.push(" AND classes.units = ");
-        query_builder.push_bind(credit_hours);
+        if credit_hours >= 0 && credit_hours <= 12 {
+            query_builder.push(" AND classes.units = ");
+            query_builder.push_bind(credit_hours);
+        }
     }
 
     if let Some(title) = &options.title {
-        query_builder.push(" AND classes.description LIKE ");
-        query_builder.push_bind(format!("%{}%", title));
+        query_builder.push(" AND UPPER(classes.description) LIKE ");
+        query_builder.push_bind(format!("%{}%", title.to_uppercase()));
     }
 
     if let Some(professor_name) = &options.professor_name {
-        query_builder.push(" AND (instructors.first_name || instructors.last_name) LIKE ");
-        query_builder.push_bind(professor_name);
+        query_builder.push(" AND UPPER(instructors.first_name || instructors.last_name) LIKE ");
+        query_builder.push_bind(professor_name.to_uppercase());
     }
 
-    // TODO: implement keywords
+    if let Some(keywords) = &options.keywords {
+        for keyword in keywords {
+            query_builder.push(" AND UPPER(classes.course_description_long) LIKE ");
+            query_builder.push_bind(keyword.to_uppercase());
+        }
+    }
 
-    // TODO: implement days
+    if let Some(days) = &options.days {
+        let weekdays: Vec<&str> = vec!["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+        for idx in 0..7 {
+            if days[idx] {
+                query_builder.push(format!(" AND meetings.{} = ", &weekdays[idx]));
+                query_builder.push_bind(WeekdayScheduled::Scheduled);
+            }
+        }
+    }
 
     if let Some(false) = options.online {
-        query_builder.push(
-            " AND NOT meetings.building = \"ONLINE\" AND NOT meetings.room_number = \"ONLINE\" ",
-        );
+        query_builder.push(" AND NOT meetings.building. = \"ONLINE\" AND NOT meetings.room_number = \"ONLINE\" ");
     }
 
     if let Some(false) = options.honors {
@@ -270,8 +279,7 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
     }
 
     if let Some(false) = options.off_campus {
-        query_builder
-            .push(" AND NOT meetings.building = \"OFFC\" AND NOT meetings.room_number = \"OFFC\" ");
+        query_builder.push(" AND NOT meetings.building = \"OFFC\" AND NOT meetings.room_number = \"OFFC\" ");
     }
 
     let query = query_builder.build_query_as::<DatabaseCourseOption>();
@@ -349,3 +357,4 @@ fn time_str_to_minutes(timestamp: &str) -> u32 {
     }
     minutes
 }
+
