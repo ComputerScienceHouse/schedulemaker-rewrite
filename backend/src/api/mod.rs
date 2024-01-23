@@ -18,7 +18,7 @@ use crate::model;
 #[openapi(
         paths(
             get_course_options::get_course_options,
-            term::get_term,
+            term::get_terms,
         ),
         components(
             schemas(
@@ -32,7 +32,6 @@ use crate::model;
                 model::ClassStatus,
                 model::EnrollmentStatus,
                 model::SchedulePrint,
-                term::Term,
             )
         ),
         tags(
@@ -51,7 +50,7 @@ pub async fn serve() {
         App::new().wrap(cors).service(
             scope("/api")
                 .service(get_course_options::get_course_options)
-                .service(term::get_term)
+                .service(term::get_terms)
                 .route("/openapi.json", web::get().to(open_api_spec))
                 .service(
                     SwaggerUi::new("/docs/{_:.*}").url("/api/openapi.json", ApiDoc::openapi()),
