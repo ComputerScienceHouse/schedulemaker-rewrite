@@ -19,7 +19,7 @@ pub async fn get_terms() -> impl Responder {
     let terms: Vec<i32> = data
         .iter()
         .map(|row| {
-            row.academic_term.unwrap()
+            row.academic_term
         })
         .collect::<Vec<i32>>();
 

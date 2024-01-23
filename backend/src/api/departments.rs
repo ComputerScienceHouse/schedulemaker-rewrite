@@ -30,8 +30,8 @@ pub async fn get_departments() -> impl Responder {
         .iter()
         .map(|row| {
             Department {
-                department: row.academic_org.clone().unwrap(),
-                college: row.academic_group.clone().unwrap(),
+                department: row.academic_org.clone(),
+                college: row.academic_group.clone(),
             }
         })
         .collect::<Vec<Department>>();
