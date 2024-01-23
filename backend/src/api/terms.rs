@@ -6,7 +6,7 @@ use sqlx::query;
 #[utoipa::path(
     context_path = "/api",
     responses(
-        (status = 200, description = "List all terms available", body = [Term]),
+        (status = 200, description = "List all terms available", body = [Vec<i32>]),
         (status = 500, description = "Error Created by Query"),
     )
 )]
