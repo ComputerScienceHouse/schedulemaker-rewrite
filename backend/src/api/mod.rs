@@ -4,7 +4,8 @@ use actix_web::{
     App, HttpResponse, HttpServer,
 };
 mod get_course_options;
-mod term;
+mod terms;
+mod departments;
 use actix_cors::Cors;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
@@ -19,6 +20,7 @@ use crate::model;
         paths(
             get_course_options::get_course_options,
             terms::get_terms,
+            departments::get_departments,
         ),
         components(
             schemas(
@@ -51,6 +53,7 @@ pub async fn serve() {
             scope("/api")
                 .service(get_course_options::get_course_options)
                 .service(terms::get_terms)
+                .service(departments::get_departments)
                 .route("/openapi.json", web::get().to(open_api_spec))
                 .service(
                     SwaggerUi::new("/docs/{_:.*}").url("/api/openapi.json", ApiDoc::openapi()),
