@@ -24,7 +24,7 @@ enum Subcommands {
 
 #[tokio::main]
 async fn main() {
-    dotenv().unwrap();
+    dotenv().expect("Couldn't find DATABASE_URL");
 
     let pool = db::get_pool().await.expect("Couldn't connect");
     sqlx::migrate!()

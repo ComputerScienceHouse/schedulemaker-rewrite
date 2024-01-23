@@ -38,15 +38,16 @@ pub async fn get_term() -> impl Responder {
     for (year, terms) in &data
         .iter()
         .map(|row| {
-            let year: i32 = row.academic_term % 1000 / 10;
-            let name = match row.academic_term % 10 {
+            let term: i32 = row.academic_term.unwrap();
+            let year: i32 = term % 1000 / 10;
+            let name = match term % 10 {
                 1 => format!("Fall 20{}", year),
                 5 => format!("Spring 20{}", year + 1),
                 8 => format!("Summer 20{}", year + 1),
                 _ => format!("Unknown 20{}", year),
             };
             Term {
-                term_id: row.academic_term,
+                term_id: term,
                 year,
                 term_name: name,
             }

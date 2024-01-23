@@ -92,7 +92,7 @@ pub struct Search {
     days: Option<Vec<bool>>,
     online: Option<bool>,
     honors: Option<bool>,
-    off_campus: Option<bool>,,
+    off_campus: Option<bool>,
 }
 
 #[derive(Debug)]
@@ -163,6 +163,7 @@ pub struct DatabaseCourseOption {
 )]
 #[post("/generate/getCourseOpts")]
 pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
+    let rit_term = ((options.term / 10000) * 1000) + (options.term % 1000);
     let course_number: String = format!("{}%", options.course).to_uppercase();
     let stem = "
         SELECT classes.course_id,
