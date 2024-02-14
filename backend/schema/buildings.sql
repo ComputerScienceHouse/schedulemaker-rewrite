@@ -9,18 +9,8 @@
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS buildings (
     `number`        VARCHAR(5) PRIMARY KEY,
-    `code`          VARCHAR(5),
-    `name`          VARCHAR(100),
-    `off_campus`    BOOLEAN DEFAULT TRUE
+    `code`          VARCHAR(5) UNIQUE NOT NULL,
+    `name`          VARCHAR(100) NOT NULL,
+    `off_campus`    BOOLEAN NOT NULL DEFAULT TRUE
 );
-
--- UNIQUE CONSTRAINT -------------------------------------------------------
-ALTER TABLE `buildings`
-    ADD CONSTRAINT UQ_buildings_code
-    UNIQUE (`code`);
-
--- NOTNULL CONSTRAINT ------------------------------------------------------
-ALTER TABLE buildings
-    ADD CONSTRAINT NN_buildings_all
-    UNIQUE (`number`, `code`, `name`, `off_campus`);
 

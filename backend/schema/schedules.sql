@@ -8,23 +8,19 @@
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS schedules (
     `id`            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `lastaccessed`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `startday`      TINYINT(1) UNSIGNED DEFAULT 0,
-    `endday`        TINYINT(1) UNSIGNED DEFAULT 6,
-    `starttime`     TINYINT(2) UNSIGNED DEFAULT 8,
-    `endtime`       TINYINT(2) UNSIGNED DEFAULT 22,
-    `term`          SMALLINT(4) UNSIGNED,
-    `image`         BOOL DEFAULT FALSE
+    `lastaccessed`  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `startday`      TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+    `endday`        TINYINT(1) UNSIGNED NOT NULL DEFAULT 6,
+    `starttime`     TINYINT(2) UNSIGNED NOT NULL DEFAULT 8,
+    `endtime`       TINYINT(2) UNSIGNED NOT NULL DEFAULT 22,
+    `term`          SMALLINT(4) UNSIGNED NOT NULL,
+    `image`         BOOL NOT NULL DEFAULT FALSE
 );
-
--- NOTNULL CONSTRAINT -----------------------------------------------------
-ALTER TABLE `schedules`
-    ADD CONSTRAINT NN_schedules_all
-    NOT NULL (`id`, `lastaccessed`, `startday`, `endday`, `starttime`, `endtime`, `term`, `image`);
 
 -- FOREIGN KEY ------------------------------------------------------------
 ALTER TABLE `schedules`
-    ADD FOREIGN KEY FK_schedules_term(`term`)
+    ADD CONSTRAINT FK_schedules_term
+    FOREIGN KEY `schedules`(`term`)
     REFERENCES `academicterms`(`term`)
     ON UPDATE CASCADE
     ON DELETE CASCADE;

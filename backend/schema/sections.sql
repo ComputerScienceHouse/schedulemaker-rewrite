@@ -9,14 +9,14 @@
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS sections (
     `id`            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `course`        INT UNSIGNED,
-    `section`       VARCHAR(4),
-    `title`         VARCHAR(30),
-    `type`          ENUM('R', 'N', 'OL', 'H', 'BL') DEFAULT 'R',
-    `status`        ENUM('O', 'C', 'X'),
-    `instructor`    VARCHAR(64) DEFAULT 'TBA',
-    `maxenroll`     SMALLINT(3) UNSIGNED,
-    `curenroll`     SMALLINT(3) UNSIGNED
+    `course`        INT UNSIGNED NOT NULL,
+    `section`       VARCHAR(4) NOT NULL,
+    `title`         VARCHAR(30) NOT NULL,
+    `type`          ENUM('R', 'N', 'OL', 'H', 'BL') NOT NULL DEFAULT 'R',
+    `status`        ENUM('O', 'C', 'X') NOT NULL,
+    `instructor`    VARCHAR(64) NOT NULL DEFAULT 'TBA',
+    `maxenroll`     SMALLINT(3) UNSIGNED NOT NULL,
+    `curenroll`     SMALLINT(3) UNSIGNED NOT NULL
 );
 
 -- UNIQUE CONSTRAINT -------------------------------------------------------
@@ -24,15 +24,10 @@ ALTER TABLE sections
     ADD CONSTRAINT UQ_sections_course_section
     UNIQUE (`course`, `section`);
 
--- NOTNULL CONSTRAINT ------------------------------------------------------
-ALTER TABLE sections
-    ADD CONSTRAINT NN_sections_all
-    UNIQUE (`id`, `course`, `section`, `title`, `type`, `status`, `instructor`, `maxenroll`, `curenroll`);
-
 -- FOREIGN KEY -------------------------------------------------------------
 ALTER TABLE sections
     ADD CONSTRAINT FK_sections_course
-    FOREIGN KEY (`course`)
+    FOREIGN KEY `sections`(`course`)
     REFERENCES `courses`(`id`)
     ON UPDATE CASCADE
     ON DELETE CASCADE;

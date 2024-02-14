@@ -1,25 +1,20 @@
 -- -------------------------------------------------------------------------
--- Section Meetings Table
+-- Section Times Table
 --
 -- @author  Sam Cordry (samc@csh.rit.edu)
 -- @decsrip Table for storing the times and locations that a section meets.
 -- -------------------------------------------------------------------------
 
 -- TABLE CREATION ----------------------------------------------------------
-CREATE TABLE IF NOT EXISTS meetings (
+CREATE TABLE IF NOT EXISTS times (
     `id`        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `section`   INT UNSIGNED,
-    `day`       TINYINT(1) UNSIGNED,
-    `start`     SMALLINT(4) UNSIGNED,
-    `end`       SMALLINT(4) UNSIGNED,
-    `building`  VARCHAR(5) DEFAULT "00",
-    `room`      VARCHAR(10) DEFAULT "0000"
+    `section`   INT UNSIGNED NOT NULL,
+    `day`       TINYINT(1) UNSIGNED NOT NULL,
+    `start`     SMALLINT(4) UNSIGNED NOT NULL,
+    `end`       SMALLINT(4) UNSIGNED NOT NULL,
+    `building`  VARCHAR(5) NOT NULL DEFAULT "00",
+    `room`      VARCHAR(10) NOT NULL DEFAULT "0000"
 );
-
--- NOTNULL CONSTRAINT ------------------------------------------------------
-ALTER TABLE meetings
-    ADD CONSTRAINT NN_meetings_all
-    NOT NULL (`id`, `section`, `day`, `start`, `end`, `building`, `room`);
 
 -- FOREIGN KEYS ------------------------------------------------------------
 ALTER TABLE times

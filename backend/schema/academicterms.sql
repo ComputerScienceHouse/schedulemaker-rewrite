@@ -10,12 +10,7 @@
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS academicterms (
     `term`      SMALLINT(5) UNSIGNED PRIMARY KEY,
-    `start`     DATE,
-    `end`       DATE
+    `start`     DATE NOT NULL,
+    `end`       DATE NOT NULL
 );
-
--- NOTNULL CONSTRAINT ------------------------------------------------------
-ALTER TABLE `academicterms`
-    ADD CONSTRAINT NN_academicterms_all
-    NOT NULL (`term`, `start`, `end`);
 

@@ -10,23 +10,18 @@
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS courses (
     `id`            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `term`          SMALLINT UNSIGNED,
-    `department`    INT UNSIGNED,
-    `course`        VARCHAR(4),
-    `credits`       TINYINT(2) UNSIGNED,
-    `title`         VARCHAR(50),
-    `description`   TEXT
+    `term`          SMALLINT UNSIGNED NOT NULL,
+    `department`    INT UNSIGNED NOT NULL,
+    `course`        VARCHAR(4) NOT NULL,
+    `credits`       TINYINT(2) UNSIGNED NOT NULL,
+    `title`         VARCHAR(50) NOT NULL,
+    `description`   TEXT NOT NULL
 );
 
 -- UNIQUE CONSTRAINT -------------------------------------------------------
 ALTER TABLE `courses`
     ADD CONSTRAINT UQ_courses_quarter_department_course
     UNIQUE (`term`, `department`, `course`);
-
--- NOTNULL CONSTRAINT ------------------------------------------------------
-ALTER TABLE `courses`
-    ADD CONSTRAINT NN_courses_all
-    NOT NULL (`id`, `term`, `department`, `course`, `credits`, `title`, `description`);
 
 -- FOREIGN KEYS ------------------------------------------------------------
 ALTER TABLE `courses`

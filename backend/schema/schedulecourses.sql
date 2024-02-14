@@ -8,14 +8,9 @@
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS schedulecourses (
     `id`        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `schedule`  INT UNSIGNED,
-    `section`   INT UNSIGNED
+    `schedule`  INT UNSIGNED NOT NULL,
+    `section`   INT UNSIGNED NOT NULL
 );
-
--- NOTNULL CONSTRAINT ------------------------------------------------------
-ALTER TABLE `schedulecourses`
-    ADD CONSTRAINT NN_schedcourses_all
-    NOT NULL (`id`, `schedule`, `section`);
 
 -- FOREIGN KEYS ------------------------------------------------------------
 ALTER TABLE `schedulecourses`

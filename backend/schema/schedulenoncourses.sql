@@ -9,17 +9,12 @@
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS schedulenoncourses (
     `id`        INT UNSIGNED PRIMARY KEY,
-    `schedule`  INT UNSIGNED,
-    `title`     VARCHAR(30),
-    `day`       TINYINT(1) UNSIGNED,
-    `start`     SMALLINT(4) UNSIGNED,
-    `end`       SMALLINT(4) UNSIGNED
+    `schedule`  INT UNSIGNED NOT NULL,
+    `title`     VARCHAR(30) NOT NULL,
+    `day`       TINYINT(1) UNSIGNED NOT NULL,
+    `start`     SMALLINT(4) UNSIGNED NOT NULL,
+    `end`       SMALLINT(4) UNSIGNED NOT NULL
 );
-
--- NOTNULL CONSTRAINT ------------------------------------------------------
-ALTER TABLE `schedulenoncourses`
-    ADD CONSTRAINT NN_schednoncourses_all
-    NOT NULL (`id`, `schedule`, `title`, `day`, `start`, `end`);
 
 -- FOREIGN KEYS ------------------------------------------------------------
 ALTER TABLE `schedulenoncourses`
