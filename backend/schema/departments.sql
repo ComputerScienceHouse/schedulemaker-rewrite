@@ -9,16 +9,26 @@
 
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS departments (
-    `id`        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `school`    INT UNSIGNED UNIQUE NOT NULL,
-    `code`      VARCHAR(4) UNIQUE NOT NULL,
-    `title`     VARCHAR(100) NOT NULL
+    id          SERIAL PRIMARY KEY,
+    school      INT UNIQUE NOT NULL,
+    code        VARCHAR(4) UNIQUE NOT NULL,
+    title       VARCHAR(100) NOT NULL
 );
 
+-- UNSIGNED CONSTRAINT ----------------------------------------------------
+ALTER TABLE departments
+    ADD CONSTRAINT CH_dept_id
+    CHECK (id >= 0);
+
+ALTER TABLE departments
+    ADD CONSTRAINT CH_dept_school
+    CHECK (school >= 0);
+
 -- FOREIGN KEYS -----------------------------------------------------------
-ALTER TABLE `departments` ADD INDEX `departments`(`school`);
-ALTER TABLE `departments` ADD CONSTRAINT FK_school FOREIGN KEY `departments`(`school`)
-    REFERENCES `schools`(`id`)
+ALTER TABLE departments
+    ADD CONSTRAINT FK_dept_school
+    FOREIGN KEY (school)
+    REFERENCES schools(id)
     ON UPDATE CASCADE
     ON DELETE CASCADE;
 

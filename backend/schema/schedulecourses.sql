@@ -7,21 +7,36 @@
 
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS schedulecourses (
-    `id`        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `schedule`  INT UNSIGNED NOT NULL,
-    `section`   INT UNSIGNED NOT NULL
+    id          SERIAL PRIMARY KEY,
+    schedule    INT NOT NULL,
+    section     INT NOT NULL
 );
 
--- FOREIGN KEYS ------------------------------------------------------------
-ALTER TABLE `schedulecourses`
-    ADD FOREIGN KEY FK_schedcourses_schedule(`schedule`)
-    REFERENCES `schedules`(`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE;
+-- UNSIGNED CONSTRAINTS ----------------------------------------------------
+ALTER TABLE schedulecourses
+    ADD CONSTRAINT CH_sc_id_pos
+    CHECK (id >= 0);
 
-ALTER TABLE `schedulecourses`
-    ADD FOREIGN KEY FK schedcourses_section(`section`)
-    REFERENCES `sections`(`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE;
+ALTER TABLE schedulecourses
+    ADD CONSTRAINT CH_sc_schedule_pos
+    CHECK (schedule >= 0);
+
+ALTER TABLE schedulecourses
+    ADD CONSTRAINT CH_sc_section_pos
+    CHECK (section >= 0);
+
+-- FOREIGN KEYS ------------------------------------------------------------
+ALTER TABLE schedulecourses
+    ADD CONSTRAINT FK_sc_schedule
+    FOREIGN KEY (schedule)
+    REFERENCES schedules(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+
+ALTER TABLE schedulecourses
+    ADD CONSTRAINT FK_sc_section
+    FOREIGN KEY (section)
+    REFERENCES schedules(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
 

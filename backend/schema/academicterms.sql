@@ -9,8 +9,13 @@
 
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS academicterms (
-    `term`      SMALLINT(5) UNSIGNED PRIMARY KEY,
-    `start`     DATE NOT NULL,
-    `end`       DATE NOT NULL
+    term            SMALLINT PRIMARY KEY,
+    start_date      DATE NOT NULL,
+    end_date        DATE NOT NULL
 );
+
+-- CONSTRAINTS -------------------------------------------------------------
+ALTER TABLE academicterms
+    ADD CONSTRAINT CH_terms_pos
+    CHECK(term >= 0);
 

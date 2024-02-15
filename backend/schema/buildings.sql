@@ -8,9 +8,9 @@
 
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS buildings (
-    `number`        VARCHAR(5) PRIMARY KEY,
-    `code`          VARCHAR(5) UNIQUE NOT NULL,
-    `name`          VARCHAR(100) NOT NULL,
-    `off_campus`    BOOLEAN NOT NULL DEFAULT TRUE
+    number        VARCHAR(5) PRIMARY KEY,
+    code          VARCHAR(5) UNIQUE NOT NULL,
+    name          VARCHAR(100) NOT NULL,
+    off_campus    BOOLEAN NOT NULL DEFAULT TRUE
 );
 

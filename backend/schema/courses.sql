@@ -9,30 +9,49 @@
 
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS courses (
-    `id`            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `term`          SMALLINT UNSIGNED NOT NULL,
-    `department`    INT UNSIGNED NOT NULL,
-    `course`        VARCHAR(4) NOT NULL,
-    `credits`       TINYINT(2) UNSIGNED NOT NULL,
-    `title`         VARCHAR(50) NOT NULL,
-    `description`   TEXT NOT NULL
+    id              SERIAL PRIMARY KEY,
+    term            SMALLINT NOT NULL,
+    department      INT NOT NULL,
+    course          VARCHAR(4) NOT NULL,
+    credits         SMALLINT NOT NULL,
+    title           VARCHAR(50) NOT NULL,
+    description     TEXT NOT NULL
 );
 
+-- UNSIGNED CONSTRAINTS ----------------------------------------------------
+ALTER TABLE courses
+    ADD CONSTRAINT CH_courses_id_pos
+    CHECK (id >= 0);
+
+ALTER TABLE courses
+    ADD CONSTRAINT CH_courses_term_pos
+    CHECK (term >= 0);
+
+ALTER TABLE courses
+    ADD CONSTRAINT CH_courses_dept_pos
+    CHECK (department >= 0);
+ 
+ALTER TABLE courses
+    ADD CONSTRAINT CH_courses_credits_pos
+    CHECK (credits >= 0);
+
 -- UNIQUE CONSTRAINT -------------------------------------------------------
-ALTER TABLE `courses`
-    ADD CONSTRAINT UQ_courses_quarter_department_course
-    UNIQUE (`term`, `department`, `course`);
+ALTER TABLE courses
+    ADD CONSTRAINT UQ_courses_term_dept_course
+    UNIQUE (term, department, course);
 
 -- FOREIGN KEYS ------------------------------------------------------------
-ALTER TABLE `courses`
-    ADD FOREIGN KEY FK_courses_quarter(`quarter`)
-    REFERENCES `academicterms`(`term`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE;
+ALTER TABLE courses
+    ADD CONSTRAINT FK_courses_term
+    FOREIGN KEY (term)
+    REFERENCES academicterms(term)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
 
-ALTER TABLE `courses`
-    ADD FOREIGN KEY FK_courses_dept(`department`)
-    REFERENCES `departments`(`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE;
+ALTER TABLE courses
+    ADD CONSTRAINT FK_courses_dept
+    FOREIGN KEY (department)
+    REFERENCES departments(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
 

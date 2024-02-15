@@ -8,8 +8,13 @@
 
 -- TABLE CREATION ----------------------------------------------------------
 CREATE TABLE IF NOT EXISTS schools (
-    `id`        INT UNSIGNED PRIMARY KEY,
-    `code`      VARCHAR(5) UNIQUE NOT NULL,
-    `title`     VARCHAR(30) NOT NULL
+    id          SERIAL PRIMARY KEY,
+    code        VARCHAR(5) UNIQUE NOT NULL,
+    title       VARCHAR(30) NOT NULL
 );
+
+-- UNSIGNED CONSTRAINT ----------------------------------------------------
+ALTER TABLE schools
+    ADD CONSTRAINT CH_schools_id_pos
+    CHECK (id >= 0);
 
