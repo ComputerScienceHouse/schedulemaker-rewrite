@@ -7,7 +7,7 @@
 //! backend queries for its information.
 
 use serde::{Deserialize, Serialize};
-use sqlx::{mysql, query_builder::Separated, types::chrono, FromRow, MySql};
+use sqlx::{mysql, query_builder::Separated, types::chrono, FromRow, Postgres};
 use std::fmt::Display;
 use utoipa::ToSchema;
 
@@ -15,15 +15,15 @@ pub trait ToRow {
     fn keys() -> &'static [&'static str];
     fn bind<'qb, 'args: 'qb, Sep: Display>(
         &self,
-        query_builder: &mut Separated<'qb, 'args, MySql, Sep>,
+        query_builder: &mut Separated<'qb, 'args, Postgres, Sep>,
     );
 }
 
-trait ToEncode<'a, T: sqlx::Type<MySql> + sqlx::Encode<'a, MySql>> {
+trait ToEncode<'a, T: sqlx::Type<Postgres> + sqlx::Encode<'a, Postgres>> {
     fn to_encode(&self) -> T;
 }
 
-impl<'a, T: sqlx::Type<MySql> + sqlx::Encode<'a, MySql> + Clone> ToEncode<'a, T> for T {
+impl<'a, T: sqlx::Type<Postgres> + sqlx::Encode<'a, Postgres> + Clone> ToEncode<'a, T> for T {
     fn to_encode(&self) -> T {
         self.clone()
     }
@@ -61,7 +61,7 @@ macro_rules! generate_to_row {
 
             fn bind<'qb, 'args: 'qb, Sep: Display>(
                 &self,
-                query_builder: &mut Separated<'qb, 'args, MySql, Sep>
+                query_builder: &mut Separated<'qb, 'args, Postgres, Sep>
             ) {
                 query_builder
                 $(.push_bind(self.$field_name.to_encode()))*;
