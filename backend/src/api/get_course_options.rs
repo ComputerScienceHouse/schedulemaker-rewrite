@@ -227,7 +227,7 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
     let mut query_builder: QueryBuilder<Postgres> = QueryBuilder::new(stem);
     query_builder.push_bind(course_number);
 
-    query_builder.push(" AND classes.academic_term = ?");
+    query_builder.push(" AND classes.academic_term = $1");
     query_builder.push_bind(rit_term);
 
     if options.ignore_full {
@@ -237,24 +237,24 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
 
     if let Some(credit_hours) = options.credit_hours {
         if credit_hours >= 0 && credit_hours <= 12 {
-            query_builder.push(" AND classes.units = ?");
+            query_builder.push(" AND classes.units = $1");
             query_builder.push_bind(credit_hours);
         }
     }
 
     if let Some(title) = &options.title {
-        query_builder.push(" AND UPPER(classes.description) LIKE ?");
+        query_builder.push(" AND UPPER(classes.description) LIKE $1");
         query_builder.push_bind(format!("%{}%", title.to_uppercase()));
     }
 
     if let Some(professor_name) = &options.professor_name {
-        query_builder.push(" AND UPPER(instructors.first_name || instructors.last_name) LIKE ?");
+        query_builder.push(" AND UPPER(instructors.first_name || instructors.last_name) LIKE $1");
         query_builder.push_bind(professor_name.to_uppercase());
     }
 
     if let Some(keywords) = &options.keywords {
         for keyword in keywords {
-            query_builder.push(" AND UPPER(classes.course_description_long) LIKE ?");
+            query_builder.push(" AND UPPER(classes.course_description_long) LIKE $1");
             query_builder.push_bind(keyword.to_uppercase());
         }
     }
