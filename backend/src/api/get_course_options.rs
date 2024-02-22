@@ -232,7 +232,7 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
 
     if options.ignore_full {
         query_builder.push(" AND classes.enrollment_status = ");
-        query_builder.push(EnrollmentStatus::Open);
+        query_builder.push_bind(EnrollmentStatus::Open);
     }
 
     if let Some(credit_hours) = options.credit_hours {
@@ -264,7 +264,7 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
         for idx in 0..7 {
             if days[idx] {
                 query_builder.push(format!(" AND meetings.{} = ", &weekdays[idx]));
-                query_builder.push(WeekdayScheduled::Scheduled);
+                query_builder.push_bind(WeekdayScheduled::Scheduled);
             }
         }
     }

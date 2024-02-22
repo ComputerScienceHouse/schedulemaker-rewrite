@@ -338,15 +338,6 @@ impl Default for WeekdayScheduled {
     }
 }
 
-impl fmt::Display for WeekdayScheduled {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match *self {
-            Scheduled => write!(f, "Y"),
-            NotScheduled => write!(f, "N"),
-        }
-    }
-}
-
 generate_to_row! {
     /// Associates instructors to the courses they teach.
     pub struct InstructorRecord {
