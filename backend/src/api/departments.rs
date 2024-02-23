@@ -9,8 +9,10 @@ use utoipa::ToSchema;
 #[derive(Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct Department {
-    department: String,
-    college: String,
+    department_code: String,
+    department_name: String,
+    school_code: String,
+    school_name: String,
 }
 
 #[utoipa::path(
@@ -22,16 +24,18 @@ pub struct Department {
 )]
 #[get("/departments")]
 pub async fn get_departments() -> impl Responder {
-    let data = query!("SELECT DISTINCT academic_org, academic_group FROM classes ORDER BY academic_group")
+    let data = query!("SELECT DISTINCT d.code AS dcode, d.title AS dtitle, s.code AS scode, s.title AS stitle FROM departments d, schools s WHERE d.school = s.id")
         .fetch_all(get_pool().await?)
         .await?;
 
-    let departments: Vec<Department> = data
+    let departments = data
         .iter()
         .map(|row| {
             Department {
-                department: row.academic_org.clone(),
-                college: row.academic_group.clone(),
+                department_code: row.dcode.clone(),
+                department_name: row.dtitle.clone(),
+                school_code: row.scode.clone(),
+                school_name: row.stitle.clone(),
             }
         })
         .collect::<Vec<Department>>();
