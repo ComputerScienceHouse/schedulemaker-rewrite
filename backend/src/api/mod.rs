@@ -29,7 +29,6 @@ use crate::model;
                 get_course_options::WeekDay,
                 get_course_options::Building,
                 get_course_options::Search,
-                get_course_options::DatabaseCourseOption,
                 model::WeekdayScheduled,
                 model::ClassStatus,
                 model::EnrollmentStatus,
