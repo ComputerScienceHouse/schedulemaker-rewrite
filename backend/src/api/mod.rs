@@ -9,7 +9,7 @@ mod departments;
 use actix_cors::Cors;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
-use sqlx::{Pool, Postgres, PoolOptions};
+use sqlx::{Pool, Postgres, Transaction, postgres::PgPoolOptions, Error};
 use log::{log, Level};
 use std::env;
 
@@ -110,7 +110,7 @@ pub async fn log_query_as<T>(
 ) -> Result<(Option<Transaction<'_, Postgres>>, Vec<T>), HttpResponse> {
     match query {
         Ok(v) => Ok((tx, v)),
-        Err(e) -> {
+        Err(e) => {
             log!(Level::Warn, "DB Query failed: {}", e);
             if let Some(tx) = tx {
                 match tx.rollback().await {
@@ -143,6 +143,7 @@ pub async fn log_query(
                     }
                 }
             }
+            return Err(HttpResponse::InternalServerError().body("Internal DB Error"));
         }
     }
 }

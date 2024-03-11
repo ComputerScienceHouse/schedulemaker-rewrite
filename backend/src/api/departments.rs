@@ -1,18 +1,18 @@
-use crate::api::get_course_options::SqlxError;
-use crate::db::get_pool;
-use actix_web::{HttpResponse, Responder, get};
+use actix_web::{HttpResponse, Responder, get, web::Data};
 use serde::{Serialize};
-use sqlx::query;
+use sqlx::query_as;
 use std::format;
 use utoipa::ToSchema;
+use log::{log, Level};
+use crate::api::{AppState, log_query_as};
 
 #[derive(Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct Department {
     dept_code: String,
-    dept_name: String,
+    dept_title: String,
     school_code: String,
-    school_name: String,
+    school_title: String,
 }
 
 #[utoipa::path(
@@ -23,7 +23,7 @@ pub struct Department {
     )
 )]
 #[get("/departments")]
-pub async fn get_departments(data: Data<AppState>) -> impl Responder {
+pub async fn get_departments(state: Data<AppState>) -> impl Responder {
     log!(Level::Info, "GET /departments");
 
     match log_query_as(
@@ -33,7 +33,7 @@ pub async fn get_departments(data: Data<AppState>) -> impl Responder {
         )
         .fetch_all(&state.db)
         .await,
-        Some(transaction),
+        None,
     )
     .await {
         Ok((_, depts)) => HttpResponse::Ok().json(depts),

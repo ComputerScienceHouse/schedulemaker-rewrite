@@ -1,13 +1,12 @@
-//use crate::UserData;
-use crate::db::get_pool;
-use crate::model::{ClassStatus, EnrollmentStatus, SchedulePrint, WeekdayScheduled};
-use actix_web::{post, web::Json, HttpResponse, Responder, ResponseError};
+use actix_web::{post, web::{Json, Data}, HttpResponse, Responder, ResponseError};
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize, Serializer};
-use sqlx::{FromRow, QueryBuilder, Postgres, Row};
+use sqlx::{QueryBuilder, Postgres, FromRow};
 use std::collections::HashMap;
 use std::fmt;
 use utoipa::ToSchema;
+use log::{log, Level};
+use crate::api::{AppState, log_query_as};
 
 fn serialize_int_as_string<S, T: ToString>(value: &T, serializer: S) -> Result<S::Ok, S::Error>
 where
@@ -35,7 +34,7 @@ pub struct CourseOption {
     times: Vec<Time>,
 }
 
-#[derive(Serialize, Debug, Clone, ToSchema)]
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct SectionInfo {
     course_id: i32,
@@ -44,11 +43,12 @@ pub struct SectionInfo {
     credits: i32,
     section_id: i32,
     curr_enroll: i32,
+    max_enroll: i32,
     instructor: String,
     dept_code: i32,
 }
 
-#[derive(Serialize, Debug, Clone, ToSchema)]
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct SectionTimeInfo {
     day: i32,
@@ -166,7 +166,7 @@ pub async fn get_course_options(
 
     let sections: Vec<SectionInfo>;
     match log_query_as(
-        query_builder.build_query_as<SectionInfo>()
+        query_builder.build_query_as::<SectionInfo>()
             .fetch_all(&state.db)
             .await,
         None,
@@ -249,14 +249,15 @@ pub async fn get_course_options(
             }
 
             let section_times: Vec<SectionTimeInfo>;
-            match log_query_as(
-                qb.build_query_as<SectionTimeInfo>()
-                    .fetch_all(&state.db)
-                    .await,
+            match futures::executor::block_on(log_query_as(
+                futures::executor::block_on(
+                    qb.build_query_as::<SectionTimeInfo>()
+                        .fetch_all(&state.db)
+                ),
                 None,
-            ).await {
+            )) {
                 Ok((_, t)) => { section_times = t; },
-                Err(e) => return e,
+                Err(_) => { section_times = vec![] },
             };
 
             let times: Vec<Time> = section_times
@@ -281,10 +282,10 @@ pub async fn get_course_options(
                     Time {
                         building: building,
                         day: weekday,
-                        start: sec_time.start_time,
-                        end: sec_time.end_time,
+                        start: sec_time.start_time as u32,
+                        end: sec_time.end_time as u32,
                         room: sec_time.room,
-                        ofF_campus: sec_time.off_campus,
+                        off_campus: sec_time.off_campus,
                     }
                 })
                 .collect::<Vec<Time>>();
@@ -292,12 +293,12 @@ pub async fn get_course_options(
             qb.reset();
 
             CourseOption {
-                course_num: format!("{}-{}", section.course, section.code),
+                course_num: format!("{}-{}", section.dept_code, section.course_id),
                 title: section.title,
                 description: section.description,
                 credits: section.credits,
-                enrolled_students: section.enrolled_students,
-                enrollment_capacity: section.enrollment_capacity,
+                enrolled_students: section.curr_enroll,
+                enrollment_capacity: section.max_enroll,
                 instructor_name: section.instructor,
                 online: times[0].building.code == "ON",
                 times: times,
@@ -305,6 +306,6 @@ pub async fn get_course_options(
         })
         .collect::<Vec<CourseOption>>();
 
-    Ok::<_, SqlxError>(HttpResponse::Ok().json(courses))
+    HttpResponse::Ok().json(courses)
 }
 

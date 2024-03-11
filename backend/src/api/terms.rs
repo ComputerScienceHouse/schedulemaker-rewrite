@@ -1,7 +1,9 @@
-use crate::api::get_course_options::SqlxError;
-use crate::db::get_pool;
-use actix_web::{HttpResponse, Responder, get};
-use sqlx::query;
+use actix_web::{HttpResponse, Responder, get, web::Data};
+use sqlx::query_as;
+use serde::Serialize;
+use utoipa::ToSchema;
+use log::{log, Level};
+use crate::api::{AppState, log_query_as};
 
 #[derive(Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
