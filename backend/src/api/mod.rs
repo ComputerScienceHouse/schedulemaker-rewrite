@@ -9,8 +9,7 @@ mod departments;
 use actix_cors::Cors;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
-use sqlx::{Pool, Postgres, Transaction, postgres::PgPoolOptions, Error};
-use log::{log, Level};
+use sqlx::{Pool, Postgres, postgres::PgPoolOptions};
 use std::env;
 
 use crate::model;
@@ -28,11 +27,11 @@ pub struct AppState {
         ),
         components(
             schemas(
-                get_course_options::CourseOption,
-                get_course_options::Time,
-                get_course_options::WeekDay,
-                get_course_options::Building,
-                get_course_options::Search,
+                model::CourseOption,
+                model::Time,
+                model::WeekDay,
+                model::Building,
+                model::Search,
                 model::WeekdayScheduled,
                 model::ClassStatus,
                 model::EnrollmentStatus,
@@ -88,63 +87,5 @@ pub async fn get_app_data() -> Data<AppState> {
     Data::new(AppState {
         db: db_pool,
     })
-}
-
-pub async fn open_transaction(db: &Pool<Postgres>) -> Result<Transaction<Postgres>, HttpResponse> {
-    match db.try_begin().await {
-        Ok(Some(t)) => Ok(t),
-        Ok(None) => {
-            log!(Level::Error, "Failed to open transaction");
-            Err(HttpResponse::InternalServerError().body("Internal DB Error: Ok(None) transaction"))
-        }
-        Err(e) => {
-            log!(Level::Error, "Failed to open transaction");
-            Err(HttpResponse::InternalServerError().body(format!("Internal DB Error: {}", e)))
-        }
-    }
-}
-
-pub async fn log_query_as<T>(
-    query: Result<Vec<T>, Error>,
-    tx: Option<Transaction<'_, Postgres>>,
-) -> Result<(Option<Transaction<'_, Postgres>>, Vec<T>), HttpResponse> {
-    match query {
-        Ok(v) => Ok((tx, v)),
-        Err(e) => {
-            log!(Level::Warn, "DB Query failed: {}", e);
-            if let Some(tx) = tx {
-                match tx.rollback().await {
-                    Ok(_) => {}
-                    Err(tx_e) => {
-                        log!(Level::Error, "Transaction failed to rollback: {}", tx_e);
-                        return Err(HttpResponse::InternalServerError().body("Internal DB Error"));
-                    }
-                }
-            }
-            return Err(HttpResponse::InternalServerError().body("Internal DB Error"));
-        }
-    }
-}
-
-pub async fn log_query(
-    query: Result<(), Error>,
-    tx: Option<Transaction<'_, Postgres>>,
-) -> Result<Option<Transaction<'_, Postgres>>, HttpResponse> {
-    match query {
-        Ok(_) => Ok(tx),
-        Err(e) => {
-            log!(Level::Warn, "DB Query failed: {}", e);
-            if let Some(tx) = tx {
-                match tx.rollback().await {
-                    Ok(_) => {}
-                    Err(tx_e) => {
-                        log!(Level::Error, "Transaction failed to rollback: {}", tx_e);
-                        return Err(HttpResponse::InternalServerError().body("Internal DB Error"));
-                    }
-                }
-            }
-            return Err(HttpResponse::InternalServerError().body("Internal DB Error"));
-        }
-    }
 }
 

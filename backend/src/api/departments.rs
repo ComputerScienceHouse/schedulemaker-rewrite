@@ -1,19 +1,10 @@
 use actix_web::{HttpResponse, Responder, get, web::Data};
-use serde::{Serialize};
 use sqlx::query_as;
 use std::format;
-use utoipa::ToSchema;
 use log::{log, Level};
-use crate::api::{AppState, log_query_as};
-
-#[derive(Serialize, Debug, Clone, ToSchema)]
-#[serde(rename_all = "camelCase")]
-pub struct Department {
-    dept_code: String,
-    dept_title: String,
-    school_code: String,
-    school_title: String,
-}
+use crate::api::AppState;
+use crate::model::Department;
+use crate::db::log_query_as;
 
 #[utoipa::path(
     context_path = "/api",

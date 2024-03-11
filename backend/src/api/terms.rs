@@ -1,15 +1,9 @@
 use actix_web::{HttpResponse, Responder, get, web::Data};
 use sqlx::query_as;
-use serde::Serialize;
-use utoipa::ToSchema;
 use log::{log, Level};
-use crate::api::{AppState, log_query_as};
-
-#[derive(Serialize, Debug, Clone, ToSchema)]
-#[serde(rename_all = "camelCase")]
-struct Term {
-    term: i32,
-}
+use crate::api::AppState;
+use crate::model::Term;
+use crate::db::log_query_as;
 
 #[utoipa::path(
     context_path = "/api",

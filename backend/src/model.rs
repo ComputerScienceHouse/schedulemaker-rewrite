@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::{query_builder::Separated, Postgres, FromRow};
 use std::fmt;
 use utoipa::ToSchema;
+use actix_web::ResponseError;
 
 pub trait ToRow {
     fn keys() -> &'static [&'static str];
@@ -349,6 +350,138 @@ generate_to_row! {
         class_meeting_number: i32,
         last_name: String,
         first_name: String,
+    }
+}
+
+/// Represents an individual /* department */
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct Department {
+    pub dept_code: String,
+    pub dept_title: String,
+    pub school_code: String,
+    pub school_title: String,
+}
+
+/// Represents a term
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct Term {
+    pub term: i32,
+}
+
+/// Represents a course that fulfills the criteria set by the search
+#[derive(Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct CourseOption {
+    pub course_num: String,
+    pub title: String,
+    pub description: String,
+    pub credits: i32,
+    pub enrolled_students: i32,
+    pub enrollment_capacity: i32,
+    pub instructor_name: String,
+    pub online: bool,
+    pub times: Vec<Time>,
+}
+
+/// Represents the relevant information about a single section of a course
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct SectionInfo {
+    pub course_id: i32,
+    pub title: String,
+    pub description: String,
+    pub credits: i32,
+    pub section_id: i32,
+    pub curr_enroll: i32,
+    pub max_enroll: i32,
+    pub instructor: String,
+    pub dept_code: i32,
+}
+
+/// Represents the relevant information about a single meeting time for a section
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct SectionTimeInfo {
+    pub day: i32,
+    pub start_time: i32,
+    pub end_time: i32,
+    pub room: String,
+    pub code: String,
+    pub number: String,
+    pub off_campus: bool,
+}
+
+/// More readable format to store information about a single meeting of a course
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct Time {
+    pub building: Building,
+    pub day: WeekDay,
+    pub start: u32,
+    pub end: u32,
+    pub room: String,
+    pub off_campus: bool,
+}
+
+/// Represents a single building
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct Building {
+    pub code: String,
+    pub number: String,
+}
+
+/// Represents a search by a user, given to the API
+#[derive(Serialize, Deserialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct Search {
+    pub course: String,
+    pub term: i32,
+    pub ignore_full: bool,
+    pub credit_hours: Option<i32>,
+    pub title: Option<String>,
+    pub professor_name: Option<String>,
+    pub keywords: Option<Vec<String>>,
+    pub days: Option<Vec<bool>>,
+    pub online: Option<bool>,
+    pub honors: Option<bool>,
+    pub off_campus: Option<bool>,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, ToSchema)]
+pub enum WeekDay {
+    #[serde(rename = "0")]
+    Sunday,
+    #[serde(rename = "1")]
+    Monday,
+    #[serde(rename = "2")]
+    Tuesday,
+    #[serde(rename = "3")]
+    Wednesday,
+    #[serde(rename = "4")]
+    Thursday,
+    #[serde(rename = "5")]
+    Friday,
+    #[serde(rename = "6")]
+    Saturday,
+}
+
+#[derive(Debug)]
+pub struct SqlxError(sqlx::Error);
+
+impl fmt::Display for SqlxError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl ResponseError for SqlxError {}
+
+impl From<sqlx::Error> for SqlxError {
+    fn from(error: sqlx::Error) -> Self {
+        Self(error)
     }
 }
 
