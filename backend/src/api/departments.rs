@@ -9,8 +9,8 @@ use utoipa::ToSchema;
 #[derive(Serialize, Debug, Clone, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct Department {
-    department_code: String,
-    department_name: String,
+    dept_code: String,
+    dept_name: String,
     school_code: String,
     school_name: String,
 }
@@ -23,23 +23,21 @@ pub struct Department {
     )
 )]
 #[get("/departments")]
-pub async fn get_departments() -> impl Responder {
-    let data = query!("SELECT DISTINCT d.code AS dcode, d.title AS dtitle, s.code AS scode, s.title AS stitle FROM departments d, schools s WHERE d.school = s.id")
-        .fetch_all(get_pool().await?)
-        .await?;
+pub async fn get_departments(data: Data<AppState>) -> impl Responder {
+    log!(Level::Info, "GET /departments");
 
-    let departments = data
-        .iter()
-        .map(|row| {
-            Department {
-                department_code: row.dcode.clone(),
-                department_name: row.dtitle.clone(),
-                school_code: row.scode.clone(),
-                school_name: row.stitle.clone(),
-            }
-        })
-        .collect::<Vec<Department>>();
-
-    Ok::<_, SqlxError>(HttpResponse::Ok().json(departments))
+    match log_query_as(
+        query_as!(
+            Department,
+            "SELECT DISTINCT d.code AS dept_code, d.title AS dept_title, s.code AS school_code, s.title AS school_title FROM departments d, schools s WHERE d.school = s.id",
+        )
+        .fetch_all(&state.db)
+        .await,
+        Some(transaction),
+    )
+    .await {
+        Ok((_, depts)) => HttpResponse::Ok().json(depts),
+        Err(e) => return e,
+    }
 }
 

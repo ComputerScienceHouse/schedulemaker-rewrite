@@ -1,7 +1,7 @@
 //use crate::UserData;
 use crate::db::get_pool;
 use crate::model::{ClassStatus, EnrollmentStatus, SchedulePrint, WeekdayScheduled};
-use actix_web::{post, web, HttpResponse, Responder, ResponseError};
+use actix_web::{post, web::Json, HttpResponse, Responder, ResponseError};
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize, Serializer};
 use sqlx::{FromRow, QueryBuilder, Postgres, Row};
@@ -33,6 +33,31 @@ pub struct CourseOption {
     instructor_name: String,
     online: bool,
     times: Vec<Time>,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct SectionInfo {
+    course_id: i32,
+    title: String,
+    description: String,
+    credits: i32,
+    section_id: i32,
+    curr_enroll: i32,
+    instructor: String,
+    dept_code: i32,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct SectionTimeInfo {
+    day: i32,
+    start_time: i32,
+    end_time: i32,
+    room: String,
+    code: String,
+    number: String,
+    off_campus: bool,
 }
 
 #[derive(Serialize, Debug, Clone, ToSchema)]
@@ -110,20 +135,24 @@ impl From<sqlx::Error> for SqlxError {
     )
 )]
 #[post("/generate/getCourseOpts")]
-pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
+pub async fn get_course_options(
+    state: Data<AppState>,
+    options: Json<Search>,
+) -> impl Responder {
+    log!(Level::Info, "GET /generate/getCourseOpts");
     let course_number = format!("{}%", options.course).to_uppercase();
 
     let mut query_builder: QueryBuilder<Postgres> = QueryBuilder::new("
-            SELECT c.id AS cid,
+            SELECT c.id AS course_id,
                 c.course,
                 c.title,
                 c.description,
                 c.credits,
-                s.id AS sid,
+                s.id AS section_id,
                 s.curr_enroll,
                 s.max_enroll,
                 s.instructor,
-                d.code
+                d.code AS dept_code
             FROM courses c, departments d, sections s
             WHERE
                 c.id = s.course AND
@@ -135,7 +164,16 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
     query_builder.push_bind(options.term);
     query_builder.push_bind(course_number);
 
-    let candidates = query_builder.build().fetch_all(get_pool().await?).await?;
+    let sections: Vec<SectionInfo>;
+    match log_query_as(
+        query_builder.build_query_as<SectionInfo>()
+            .fetch_all(&state.db)
+            .await,
+        None,
+    ).await {
+        Ok((_, secs)) => { sections = secs; },
+        Err(e) => return e,
+    };
 
     let stem = "
         SELECT t.day,
@@ -149,8 +187,7 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
         WHERE
             c.id = s.course AND
             t.section = s.id AND
-            t.building = b.id
-    ";
+            t.building = b.id";
 
     let mut qb: QueryBuilder<Postgres> = QueryBuilder::new(stem);
 
@@ -188,11 +225,11 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
 
     qb.push(" AND c.id = $1 AND s.id = $2");
 
-    let courses = candidates
+    let courses: Vec<CourseOption> = sections
         .into_iter()
-        .map(|row| {
-            qb.push_bind(row.get::<i32, &str>("cid"));
-            qb.push_bind(row.get::<i32, &str>("sid"));
+        .map(|section| {
+            qb.push_bind(section.course_id);
+            qb.push_bind(section.section_id);
 
             if let Some(days) = &options.days {
                 for idx in 0..7 {
@@ -211,15 +248,26 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
                 qb.push(" AND NOT b.code = 'OFFC'");
             }
 
-            let times = qb.build().fetch_all(get_pool())
+            let section_times: Vec<SectionTimeInfo>;
+            match log_query_as(
+                qb.build_query_as<SectionTimeInfo>()
+                    .fetch_all(&state.db)
+                    .await,
+                None,
+            ).await {
+                Ok((_, t)) => { section_times = t; },
+                Err(e) => return e,
+            };
+
+            let times: Vec<Time> = section_times
                 .into_iter()
-                .map(|r| {
-                    let building = Building {
-                        code: r.get::<String, &str>("code"),
-                        number: r.get::<String, &str>("number"),
+                .map(|sec_time| {
+                    let building: Building = Building {
+                        code: sec_time.code,
+                        number: sec_time.number,
                     };
 
-                    let weekday: WeekDay = match r.get::<i32, &str>("day") {
+                    let weekday: WeekDay = match sec_time.day {
                         0 => WeekDay::Sunday,
                         1 => WeekDay::Monday,
                         2 => WeekDay::Tuesday,
@@ -233,10 +281,10 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
                     Time {
                         building: building,
                         day: weekday,
-                        start: r.get::<i32, &str>("start_time") as u32,
-                        end: r.get::<i32, &str>("end_time") as u32,
-                        room: r.get::<String, &str>("room"),
-                        off_campus: r.get::<bool, &str>("off_campus"),
+                        start: sec_time.start_time,
+                        end: sec_time.end_time,
+                        room: sec_time.room,
+                        ofF_campus: sec_time.off_campus,
                     }
                 })
                 .collect::<Vec<Time>>();
@@ -244,13 +292,13 @@ pub async fn get_course_options(options: web::Json<Search>) -> impl Responder {
             qb.reset();
 
             CourseOption {
-                course_num: format!("{}-{}", row.get::<String, &str>("course"), row.get::<String, _>("code")),
-                title: row.get::<String, &str>("title"),
-                description: row.get::<String, &str>("description"),
-                credits: row.get::<i32, &str>("credits"),
-                enrolled_students: row.get::<i32, &str>("enrolled_students"),
-                enrollment_capacity: row.get::<i32, &str>("enrollment_capacity"),
-                instructor_name: row.get::<String, &str>("instructor"),
+                course_num: format!("{}-{}", section.course, section.code),
+                title: section.title,
+                description: section.description,
+                credits: section.credits,
+                enrolled_students: section.enrolled_students,
+                enrollment_capacity: section.enrollment_capacity,
+                instructor_name: section.instructor,
                 online: times[0].building.code == "ON",
                 times: times,
             }
