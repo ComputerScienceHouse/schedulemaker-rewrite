@@ -5,6 +5,7 @@ mod dat;
 mod db;
 mod import;
 mod model;
+mod parse;
 use crate::api::serve;
 
 #[derive(Parser)]
@@ -34,7 +35,10 @@ async fn main() {
 
     let cli = Cli::parse();
     match cli.command {
-        Subcommands::Import => import::import(pool).await.expect("Couldn't import :("),
+        Subcommands::Import => {
+            import::import(pool).await.expect("Couldn't import :(");
+            parse::parse(pool).await.expect("Couldn't parse :(");
+        }
         Subcommands::Serve => serve().await,
     }
 }

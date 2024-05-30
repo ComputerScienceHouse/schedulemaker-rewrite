@@ -6,11 +6,15 @@
 //! All the other records represent the more permanent tables that the
 //! backend queries for its information.
 
-use serde::{Deserialize, Serialize};
-use sqlx::{query_builder::Separated, Postgres, FromRow};
-use std::fmt;
-use utoipa::ToSchema;
 use actix_web::ResponseError;
+use chrono::{DateTime, NaiveDate, Utc};
+use serde::{Deserialize, Serialize};
+use sqlx::{query_builder::Separated, FromRow, Postgres};
+use std::{
+    fmt::{self, *},
+    string::ToString,
+};
+use utoipa::ToSchema;
 
 pub trait ToRow {
     fn keys() -> &'static [&'static str];
@@ -41,12 +45,12 @@ macro_rules! generate_to_row {
         #[doc = $doc:expr]
         pub struct $name:ident {
             $(
-                $(#[doc = $field_doc:expr])?
-                $field_name:ident: $field_type:ty,
-            )*
-        }
+    $(#[doc = $field_doc:expr])?
+    $field_name:ident: $field_type:ty,
+    )*
+    }
     ) => {
-        #[derive(Debug, Serialize, Deserialize, FromRow, Default)]
+    #[derive(Debug, Serialize, Deserialize, FromRow, Default)]
         #[doc = $doc]
         pub struct $name {
             $(
@@ -138,7 +142,7 @@ generate_to_row! {
     /// Represents created schedules
     pub struct ScheduleRecord {
         id: i32,
-        last_accessed: chrono::DateTime<chrono::Utc>,
+        last_accessed: DateTime<Utc>,
         start_day: i8,
         end_day: i8,
         start_time: i8,
@@ -207,6 +211,18 @@ impl Default for SectionType {
     }
 }
 
+impl Display for SectionType {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Regular => write!(f, "R"),
+            Self::None => write!(f, "N"),
+            Self::Online => write!(f, "OL"),
+            Self::Honors => write!(f, "H"),
+            Self::Blended => write!(f, "BL"),
+        }
+    }
+}
+
 /// Represents the current status of the section
 #[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema)]
 pub enum SectionStatus {
@@ -224,6 +240,16 @@ impl Default for SectionStatus {
     }
 }
 
+impl Display for SectionStatus {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            Self::Open => write!(f, "O"),
+            Self::Closed => write!(f, "C"),
+            Self::Cancelled => write!(f, "X"),
+        }
+    }
+}
+
 generate_to_row! {
     /// Record used to lightly organize class data for later parsing
     pub struct ClassRecord {
@@ -237,7 +263,7 @@ generate_to_row! {
         description: String,
         topic: String,
         class_number: i32,
-        ssr_componenet: String,
+        ssr_component: String,
         units: String,
         enrollment_status: EnrollmentStatus,
         class_status: ClassStatus,
@@ -255,7 +281,7 @@ generate_to_row! {
 }
 
 /// Represents whether a class has available seats or is full.
-#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema)]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema, PartialEq)]
 pub enum ClassStatus {
     #[serde(rename = "A")]
     Available,
@@ -269,8 +295,27 @@ impl Default for ClassStatus {
     }
 }
 
+impl Display for ClassStatus {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            Self::Available => write!(f, "A"),
+            Self::Cancelled => write!(f, "X"),
+        }
+    }
+}
+
+impl ClassStatus {
+    pub fn from_str(s: &str) -> Self {
+        match s {
+            "A" => Self::Available,
+            "X" => Self::Cancelled,
+            _ => Self::default(),
+        }
+    }
+}
+
 /// Represents whether a course is open for enrollment or not.
-#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema)]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema, PartialEq)]
 pub enum EnrollmentStatus {
     #[serde(rename = "O")]
     Open,
@@ -284,7 +329,26 @@ impl Default for EnrollmentStatus {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema)]
+impl Display for EnrollmentStatus {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            Self::Open => write!(f, "O"),
+            Self::Closed => write!(f, "C"),
+        }
+    }
+}
+
+impl EnrollmentStatus {
+    pub fn from_str(s: &str) -> Self {
+        match s {
+            "O" => Self::Open,
+            "C" => Self::Closed,
+            _ => Self::default(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema, PartialEq)]
 pub enum SchedulePrint {
     #[serde(rename = "Y")]
     Visible,
@@ -292,10 +356,28 @@ pub enum SchedulePrint {
     Hidden,
 }
 
-/// Represents whether a class is visible or not
 impl Default for SchedulePrint {
     fn default() -> Self {
         Self::Visible
+    }
+}
+
+impl Display for SchedulePrint {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            Self::Visible => write!(f, "Y"),
+            Self::Hidden => write!(f, "N"),
+        }
+    }
+}
+
+impl SchedulePrint {
+    pub fn from_str(s: &str) -> Self {
+        match s {
+            "Y" => Self::Visible,
+            "N" => Self::Hidden,
+            _ => Self::default(),
+        }
     }
 }
 
@@ -325,7 +407,7 @@ generate_to_row! {
 }
 
 /// Represents whether a section meets on a given day of the week.
-#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema)]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, ToSchema, PartialEq)]
 pub enum WeekdayScheduled {
     #[serde(rename = "Y")]
     Scheduled,
@@ -336,6 +418,25 @@ pub enum WeekdayScheduled {
 impl Default for WeekdayScheduled {
     fn default() -> Self {
         Self::Scheduled
+    }
+}
+
+impl Display for WeekdayScheduled {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            Self::Scheduled => write!(f, "Y"),
+            Self::NotScheduled => write!(f, "N"),
+        }
+    }
+}
+
+impl WeekdayScheduled {
+    pub fn from_str(s: &str) -> Self {
+        match s {
+            "Y" | "Scheduled" => Self::Scheduled,
+            "N" | "NotScheduled" => Self::NotScheduled,
+            _ => Self::default(),
+        }
     }
 }
 
@@ -358,9 +459,9 @@ generate_to_row! {
 #[serde(rename_all = "camelCase")]
 pub struct Department {
     pub dept_code: String,
-    pub dept_title: String,
+    pub dept_title: Option<String>,
     pub school_code: String,
-    pub school_title: String,
+    pub school_title: Option<String>,
 }
 
 /// Represents a term
@@ -468,6 +569,41 @@ pub enum WeekDay {
     Saturday,
 }
 
+impl Display for WeekDay {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            Self::Sunday => write!(f, "0"),
+            Self::Monday => write!(f, "1"),
+            Self::Tuesday => write!(f, "2"),
+            Self::Wednesday => write!(f, "3"),
+            Self::Thursday => write!(f, "4"),
+            Self::Friday => write!(f, "5"),
+            Self::Saturday => write!(f, "6"),
+        }
+    }
+}
+
+impl Default for WeekDay {
+    fn default() -> Self {
+        Self::Sunday
+    }
+}
+
+impl WeekDay {
+    pub fn from_str(s: &str) -> Self {
+        match s {
+            "0" => Self::Sunday,
+            "1" => Self::Monday,
+            "2" => Self::Tuesday,
+            "3" => Self::Wednesday,
+            "4" => Self::Thursday,
+            "5" => Self::Friday,
+            "6" => Self::Saturday,
+            _ => Self::default(),
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct SqlxError(sqlx::Error);
 
@@ -485,3 +621,143 @@ impl From<sqlx::Error> for SqlxError {
     }
 }
 
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct TempSemTime {
+    pub academic_term: i32,
+    pub start_date: Option<String>,
+    pub end_date: Option<String>,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct SemTime {
+    pub academic_term: i32,
+    pub start_date: NaiveDate,
+    pub end_date: NaiveDate,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow, PartialOrd, Ord)]
+#[serde(rename_all = "camelCase")]
+pub struct Course {
+    pub academic_term: i32,
+    pub subject: String,
+    pub units: String,
+    pub academic_org: String,
+    pub catalog_number: String,
+    pub description: String,
+    pub course_description_long: String,
+    pub course_id: i32,
+    pub course_offer_number: i32,
+    pub session_code: String,
+}
+
+impl PartialEq for Course {
+    fn eq(&self, other: &Self) -> bool {
+        self.academic_term == other.academic_term
+            && self.subject == other.subject
+            && self.units == other.units
+            && self.academic_org == other.academic_org
+            && self.catalog_number == other.catalog_number
+            && self.description == other.description
+            && self.course_description_long == other.course_description_long
+            && self.course_id == other.course_id
+            && self.course_offer_number == other.course_offer_number
+            && self.session_code == other.session_code
+    }
+}
+
+impl Eq for Course {}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct CourseIOUResult {
+    pub insertorupdatecourse: Option<Vec<i32>>,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct SectionIOUResult {
+    pub insertorupdatesection: Option<Vec<i32>>,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct TempSection {
+    pub class_section: String,
+    pub description: String,
+    pub topic: String,
+    pub enrollment_status: String,
+    pub class_status: String,
+    pub class_type: String,
+    pub enrollment_capacity: i32,
+    pub enrollment_total: i32,
+    pub instruction_mode: String,
+    pub schedule_print: String,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct Section {
+    pub class_section: String,
+    pub description: String,
+    pub topic: String,
+    pub enrollment_status: EnrollmentStatus,
+    pub class_status: ClassStatus,
+    pub class_type: char,
+    pub enrollment_capacity: i32,
+    pub enrollment_total: i32,
+    pub instruction_mode: String,
+    pub schedule_print: SchedulePrint,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct TempSectionMeeting {
+    pub building: String,
+    pub room_number: String,
+    pub meeting_time_start: String,
+    pub meeting_time_end: String,
+    pub monday: String,
+    pub tuesday: String,
+    pub wednesday: String,
+    pub thursday: String,
+    pub friday: String,
+    pub saturday: String,
+    pub sunday: String,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct SectionMeeting {
+    pub building: String,
+    pub room_number: String,
+    pub meeting_time_start: String,
+    pub meeting_time_end: String,
+    pub monday: WeekdayScheduled,
+    pub tuesday: WeekdayScheduled,
+    pub wednesday: WeekdayScheduled,
+    pub thursday: WeekdayScheduled,
+    pub friday: WeekdayScheduled,
+    pub saturday: WeekdayScheduled,
+    pub sunday: WeekdayScheduled,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct Code {
+    pub code: String,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct Name {
+    pub name: Option<String>,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct WeekdayInfo {
+    pub weekday: WeekDay,
+    pub scheduled: WeekdayScheduled,
+}

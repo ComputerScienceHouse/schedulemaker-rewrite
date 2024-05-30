@@ -3,14 +3,14 @@ use actix_web::{
     web::{self, scope, Data},
     App, HttpResponse, HttpServer,
 };
+mod departments;
 mod get_course_options;
 mod terms;
-mod departments;
 use actix_cors::Cors;
+use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use std::env;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
-use sqlx::{Pool, Postgres, postgres::PgPoolOptions};
-use std::env;
 
 use crate::model;
 
@@ -83,9 +83,5 @@ pub async fn get_app_data() -> Data<AppState> {
         .connect(&env::var("DATABASE_URL").expect("DATABASE_URL not set"))
         .await
         .expect("Could not connect to database");
-    println!("Successfully opened db connection");
-    Data::new(AppState {
-        db: db_pool,
-    })
+    Data::new(AppState { db: db_pool })
 }
-

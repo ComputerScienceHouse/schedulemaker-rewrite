@@ -1,9 +1,7 @@
-use actix_web::{HttpResponse, Responder, get, web::Data};
-use sqlx::query_as;
+use crate::{api::AppState, model::Term};
+use actix_web::{get, web::Data, HttpResponse, Responder};
 use log::{log, Level};
-use crate::api::AppState;
-use crate::model::Term;
-use crate::db::log_query_as;
+use sqlx::query_as;
 
 #[utoipa::path(
     context_path = "/api",
@@ -16,18 +14,14 @@ use crate::db::log_query_as;
 pub async fn get_terms(state: Data<AppState>) -> impl Responder {
     log!(Level::Info, "GET /terms");
 
-    match log_query_as(
-        query_as!(
-            Term,
-            "SELECT DISTINCT term FROM academicterms ORDER BY term DESC",
-        )
-        .fetch_all(&state.db)
-        .await,
-        None,
+    match query_as!(
+        Term,
+        "SELECT DISTINCT term FROM academicterms ORDER BY term DESC",
     )
-    .await {
-        Ok((_, terms)) => HttpResponse::Ok().json(terms),
-        Err(e) => return e,
+    .fetch_all(&state.db)
+    .await
+    {
+        Ok(terms) => HttpResponse::Ok().json(terms),
+        Err(e) => HttpResponse::InternalServerError().json(e.to_string()),
     }
 }
-

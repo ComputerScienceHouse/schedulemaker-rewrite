@@ -1,9 +1,14 @@
-use actix_web::{post, web::{Json, Data}, HttpResponse, Responder};
-use sqlx::{QueryBuilder, Postgres};
+use crate::{
+    api::AppState,
+    model::{Building, CourseOption, Search, SectionInfo, SectionTimeInfo, Time, WeekDay},
+};
+use actix_web::{
+    post,
+    web::{Data, Json},
+    HttpResponse, Responder,
+};
 use log::{log, Level};
-use crate::api::AppState;
-use crate::model::{Search, SectionInfo, CourseOption, SectionTimeInfo, Time, Building, WeekDay};
-use crate::db::log_query_as;
+use sqlx::{Postgres, QueryBuilder};
 
 #[utoipa::path(
     context_path = "/api",
@@ -14,14 +19,12 @@ use crate::db::log_query_as;
     )
 )]
 #[post("/generate/getCourseOpts")]
-pub async fn get_course_options(
-    state: Data<AppState>,
-    options: Json<Search>,
-) -> impl Responder {
+pub async fn get_course_options(state: Data<AppState>, options: Json<Search>) -> impl Responder {
     log!(Level::Info, "GET /generate/getCourseOpts");
     let course_number = format!("{}%", options.course).to_uppercase();
 
-    let mut query_builder: QueryBuilder<Postgres> = QueryBuilder::new("
+    let mut query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
+        "
             SELECT c.id AS course_id,
                 c.course,
                 c.title,
@@ -38,20 +41,19 @@ pub async fn get_course_options(
                 c.department = d.id AND
                 s.status != 'X' AND
                 c.term = $1 AND
-                (d.code || '-' || c.course || '-' || s.section) LIKE '$2'");
+                (d.code || '-' || c.course || '-' || s.section) LIKE '$2'",
+    );
 
     query_builder.push_bind(options.term);
     query_builder.push_bind(course_number);
 
-    let sections: Vec<SectionInfo>;
-    match log_query_as(
-        query_builder.build_query_as::<SectionInfo>()
-            .fetch_all(&state.db)
-            .await,
-        None,
-    ).await {
-        Ok((_, secs)) => { sections = secs; },
-        Err(e) => return e,
+    let sections: Vec<SectionInfo> = match query_builder
+        .build_query_as::<SectionInfo>()
+        .fetch_all(&state.db)
+        .await
+    {
+        Ok(sections) => sections,
+        Err(e) => return HttpResponse::InternalServerError().json(e.to_string()),
     };
 
     let stem = "
@@ -75,7 +77,7 @@ pub async fn get_course_options(
     }
 
     if let Some(credit_hours) = options.credit_hours {
-        if credit_hours >= 0 && credit_hours <= 12 {
+        if (0..=12).contains(&credit_hours) {
             qb.push(" AND c.credits = $1");
             qb.push_bind(credit_hours);
         }
@@ -111,10 +113,10 @@ pub async fn get_course_options(
             qb.push_bind(section.section_id);
 
             if let Some(days) = &options.days {
-                for idx in 0..7 {
-                    if days[idx] {
+                for (i, day) in days.iter().enumerate() {
+                    if *day {
                         qb.push(" AND t.day = $1");
-                        qb.push_bind(idx as i32);
+                        qb.push_bind(i as i32);
                     }
                 }
             }
@@ -127,16 +129,11 @@ pub async fn get_course_options(
                 qb.push(" AND NOT b.code = 'OFFC'");
             }
 
-            let section_times: Vec<SectionTimeInfo>;
-            match futures::executor::block_on(log_query_as(
-                futures::executor::block_on(
-                    qb.build_query_as::<SectionTimeInfo>()
-                        .fetch_all(&state.db)
-                ),
-                None,
-            )) {
-                Ok((_, t)) => { section_times = t; },
-                Err(_) => { section_times = vec![] },
+            let section_times: Vec<SectionTimeInfo> = match futures::executor::block_on(
+                qb.build_query_as::<SectionTimeInfo>().fetch_all(&state.db),
+            ) {
+                Ok(times) => times,
+                Err(_) => vec![],
             };
 
             let times: Vec<Time> = section_times
@@ -159,7 +156,7 @@ pub async fn get_course_options(
                     };
 
                     Time {
-                        building: building,
+                        building,
                         day: weekday,
                         start: sec_time.start_time as u32,
                         end: sec_time.end_time as u32,
@@ -180,11 +177,10 @@ pub async fn get_course_options(
                 enrollment_capacity: section.max_enroll,
                 instructor_name: section.instructor,
                 online: times[0].building.code == "ON",
-                times: times,
+                times,
             }
         })
         .collect::<Vec<CourseOption>>();
 
     HttpResponse::Ok().json(courses)
 }
-
