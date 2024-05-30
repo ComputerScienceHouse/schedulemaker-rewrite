@@ -1,0 +1,86 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT building, room_number, meeting_time_start, meeting_time_end, monday, tuesday, wednesday, thursday, friday, saturday, sunday FROM meetings WHERE course_id = $1 AND course_offer_number = $2 AND academic_term = $3 AND session_code = $4 AND class_section = $5",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "building",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "room_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "meeting_time_start",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "meeting_time_end",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "monday",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "tuesday",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "wednesday",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "thursday",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "friday",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 9,
+        "name": "saturday",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 10,
+        "name": "sunday",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Int4",
+        "Int4",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "ae171b3de35e4313026d2b4446f66d3dd1da94c676363a4f8e9cabc74a5bbbae"
+}

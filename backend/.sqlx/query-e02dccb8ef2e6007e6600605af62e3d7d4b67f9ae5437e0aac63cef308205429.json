@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO academicterms (term, start_date, end_date) VALUES ($1, $2, $3) ON CONFLICT (term) DO UPDATE SET start_date = $2, end_date = $3",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int2",
+        "Date",
+        "Date"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e02dccb8ef2e6007e6600605af62e3d7d4b67f9ae5437e0aac63cef308205429"
+}

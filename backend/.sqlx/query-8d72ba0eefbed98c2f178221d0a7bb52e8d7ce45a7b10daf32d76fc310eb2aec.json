@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO scrapelog (time_started, time_ended, terms_added, courses_added, courses_updated, sections_added, sections_updated, failures) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8",
+        "Int2",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Int4",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "8d72ba0eefbed98c2f178221d0a7bb52e8d7ce45a7b10daf32d76fc310eb2aec"
+}

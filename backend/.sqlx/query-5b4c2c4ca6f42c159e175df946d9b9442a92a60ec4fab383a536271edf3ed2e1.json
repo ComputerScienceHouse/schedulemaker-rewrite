@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM times WHERE section = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "5b4c2c4ca6f42c159e175df946d9b9442a92a60ec4fab383a536271edf3ed2e1"
+}

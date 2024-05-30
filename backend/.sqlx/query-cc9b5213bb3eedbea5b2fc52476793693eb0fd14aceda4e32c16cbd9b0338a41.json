@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE sections SET status = 'X' WHERE course IN (SELECT term FROM courses WHERE term IN (SELECT * FROM UNNEST(CAST($1 as int4[]))))",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int4Array"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "cc9b5213bb3eedbea5b2fc52476793693eb0fd14aceda4e32c16cbd9b0338a41"
+}

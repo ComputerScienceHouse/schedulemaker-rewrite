@@ -1,0 +1,79 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT class_section, description, topic, enrollment_status, class_status, class_type, enrollment_capacity, enrollment_total, instruction_mode, schedule_print FROM classes WHERE course_id = $1 AND course_offer_number = $2 AND academic_term = $3 AND session_code = $4",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "class_section",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "description",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "topic",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "enrollment_status",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "class_status",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "class_type",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "enrollment_capacity",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 7,
+        "name": "enrollment_total",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 8,
+        "name": "instruction_mode",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 9,
+        "name": "schedule_print",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Int4",
+        "Int4",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "f61fabf5a512ea9a10d9dde9d6e542ef44b1cfbcc370a0c0dfd5f809c513d616"
+}

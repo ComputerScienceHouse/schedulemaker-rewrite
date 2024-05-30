@@ -1,0 +1,20 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT DISTINCT term FROM academicterms ORDER BY term DESC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "term",
+        "type_info": "Int2"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "e7ef23c96f4ffe6bb4833fd9770b0ad3387cdea1494894c66797b603fced23fc"
+}

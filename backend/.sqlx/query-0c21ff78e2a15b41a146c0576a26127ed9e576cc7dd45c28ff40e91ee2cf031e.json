@@ -1,0 +1,12 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO departments (code, school) (SELECT DISTINCT c.academic_org, s.id FROM classes c, schools s WHERE s.code = c.academic_group) ON CONFLICT (code) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": []
+  },
+  "hash": "0c21ff78e2a15b41a146c0576a26127ed9e576cc7dd45c28ff40e91ee2cf031e"
+}

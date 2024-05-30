@@ -1,0 +1,32 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT academic_term, mode() WITHIN GROUP (ORDER BY start_date) as start_date, mode() WITHIN GROUP (ORDER BY end_date) as end_date FROM meetings GROUP BY academic_term",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "academic_term",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "start_date",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "end_date",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "ade316356817c6e10c306d8280e2a08673d499074d867588925fa93c621bab13"
+}

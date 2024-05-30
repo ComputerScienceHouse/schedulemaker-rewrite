@@ -1,0 +1,26 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT CONCAT(first_name, ' ', last_name) AS name FROM instructors WHERE course_id = $1 AND course_offer_number = $2 AND academic_term = $3 AND session_code = $4 AND class_section = $5 LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "name",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Int4",
+        "Int4",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "06787fe662d15e8ca35f6658d047448c819e566dc8dba98b3256c15b8c33296a"
+}

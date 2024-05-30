@@ -1,0 +1,12 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO schools (code) (SELECT academic_group FROM classes WHERE academic_group NOT IN (SELECT code FROM schools)) ON CONFLICT (code) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": []
+  },
+  "hash": "e567fe242d4690ee6e1ad6ecd89e404a7833a94ad1b1fe19ba6a93a85b4d5ea3"
+}
