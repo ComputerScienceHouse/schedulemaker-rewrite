@@ -468,7 +468,15 @@ pub struct Department {
 #[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Term {
-    pub term: i32,
+    pub term_id: i32,
+    pub term_name: String,
+}
+
+#[derive(Serialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Year {
+    pub year: String,
+    pub terms: Vec<Term>,
 }
 
 /// Represents a course that fulfills the criteria set by the search

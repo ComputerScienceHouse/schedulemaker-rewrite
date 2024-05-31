@@ -4,26 +4,24 @@ const TermSelect = (props) => {
   let [terms, setTerms] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      let termData = await fetch("/api/terms", {
-          method: "GET"
+      let termData = await fetch("http://localhost:3000/api/terms", {
+        method: "GET"
       }).then((res) => {
-          if (res.status === 200) {
-              return res.json();
-          } else {
-              throw new Error("Unable to get terms");
-          }
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error("Unable to get terms");
+        }
       }).then((data) => {
-          return Object.entries(data).sort().reverse().map(
-            (entry) => [entry[0], entry[1].sort((a,b) => a.termId > b.termId ? -1 : 1)]
-          );
+        return Object.entries(data);
       }).catch((err) => {
-          return [];
+        return [];
       });
       setTerms(termData);
-      props.setActiveTerm(termData[0][1][0].termId);
+      props.activeTerm = termData[0][1].terms[0].termId;
     }
     fetchData();
-  }, []);
+  }, [props]);
   return (
     <div className="panel panel-default form-horizontal">
       <div className="panel-heading">
@@ -39,18 +37,16 @@ const TermSelect = (props) => {
               <div class="col-sm-6">
                 <select className="form-control" onChange={e => props.setActiveTerm(Number(e.target.value))}>
                   {terms.map((entry) => {
-                    console.log(entry);
-                    const [year, innerTerms] = entry;
-                    console.log(innerTerms);
+                    const [_, e] = entry;
                     return (
-                      <optgroup label={year}>
-                        {innerTerms.map((term) => 
+                      <optgroup label={e.year}>
+                        {e.terms.map((term) =>
                           <option value={term.termId}>
                             {term.termName}
                           </option>
                         )}
                       </optgroup>
-                    );
+                    )
                   })}
                 </select>
               </div>
@@ -60,7 +56,7 @@ const TermSelect = (props) => {
       </div>
       {
         React.Children.map(
-          props.children, child => React.cloneElement(child, {activeTerm: props.activeTerm})
+          props.children, child => React.cloneElement(child, { activeTerm: props.activeTerm })
         )
       }
     </div>
