@@ -133,8 +133,6 @@ pub async fn parse(db: &Pool<Postgres>) -> Result<(), ()> {
     courses.dedup();
 
     for course in courses.iter() {
-        println!("{:?}", course.clone());
-
         let c_inserted: bool;
         let course_id: i32;
         match query_as!(
@@ -230,8 +228,6 @@ pub async fn parse(db: &Pool<Postgres>) -> Result<(), ()> {
         }
 
         for section in sections.iter() {
-            println!("{:?}", section.clone());
-
             let mut instructor: String = String::default();
             match query_as!(
                 Name,
@@ -417,11 +413,11 @@ pub async fn parse(db: &Pool<Postgres>) -> Result<(), ()> {
                 for day in days {
                     if day.scheduled == WeekdayScheduled::Scheduled {
                         match query!(
-                            "INSERT INTO times (section, day, start_time, end_time, building, room) VALUES ($1, $2, $3, $4, $5, $6)",
+                            "INSERT INTO times (section, day, start, \"end\", building, room) VALUES ($1, $2, $3, $4, $5, $6)",
                             section_id,
                             day.weekday.to_string().parse::<i16>().unwrap(),
-                            time_from_str(&meeting.meeting_time_start.chars().take_while(|&c| c != ' ').collect::<String>()),
-                            time_from_str(&meeting.meeting_time_end.chars().take_while(|&c| c != ' ').collect::<String>()),
+                            time_from_str(&meeting.meeting_time_start),
+                            time_from_str(&meeting.meeting_time_end),
                             meeting.building,
                             meeting.room_number,
                         ).execute(&mut *transaction).await {
@@ -470,7 +466,7 @@ pub async fn parse(db: &Pool<Postgres>) -> Result<(), ()> {
 }
 
 fn time_from_str(s: &str) -> i16 {
-    ((NaiveTime::parse_from_str(s, "%R")
+    ((NaiveTime::parse_from_str(s, "%I:%M %p")
         .unwrap()
         .signed_duration_since(NaiveTime::MIN)
         .to_std()

@@ -4,7 +4,7 @@ const TermSelect = (props) => {
   let [terms, setTerms] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      let termData = await fetch("http://localhost:3000/api/terms", {
+      let termData = await fetch("/api/terms", {
         method: "GET"
       }).then((res) => {
         if (res.status === 200) {

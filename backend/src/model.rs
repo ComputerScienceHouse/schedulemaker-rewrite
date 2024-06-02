@@ -55,7 +55,7 @@ macro_rules! generate_to_row {
         pub struct $name {
             $(
                 $(#[doc = $field_doc])?
-                $field_name: $field_type,
+                pub $field_name: $field_type,
             )*
         }
 
@@ -157,7 +157,7 @@ generate_to_row! {
     pub struct SchoolRecord {
         id: i32,
         code: String,
-        title: String,
+        title: Option<String>,
     }
 }
 
@@ -458,10 +458,9 @@ generate_to_row! {
 #[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Department {
-    pub dept_code: String,
-    pub dept_title: Option<String>,
-    pub school_code: String,
-    pub school_title: Option<String>,
+    pub id: i32,
+    pub code: String,
+    pub title: Option<String>,
 }
 
 /// Represents a term
@@ -477,6 +476,48 @@ pub struct Term {
 pub struct Year {
     pub year: String,
     pub terms: Vec<Term>,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct CourseInfo {
+    pub id: i32,
+    pub code: Option<String>,
+    pub title: String,
+    pub description: String,
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct SectionInfo {
+    pub id: i32,
+    pub code: String,
+    pub title: String,
+    pub instructor: String,
+    pub times: Vec<TimeInfo>,
+}
+
+impl Default for SectionInfo {
+    fn default() -> Self {
+        Self {
+            id: i32::default(),
+            code: String::default(),
+            title: String::default(),
+            instructor: String::default(),
+            times: vec![],
+        }
+    }
+}
+
+#[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
+#[serde(rename_all = "camelCase")]
+pub struct TimeInfo {
+    pub day: i32,
+    pub start: i32,
+    pub end: i32,
+    pub building_code: String,
+    pub building_number: String,
+    pub room: String,
 }
 
 /// Represents a course that fulfills the criteria set by the search
@@ -497,7 +538,7 @@ pub struct CourseOption {
 /// Represents the relevant information about a single section of a course
 #[derive(Serialize, Debug, Clone, ToSchema, FromRow)]
 #[serde(rename_all = "camelCase")]
-pub struct SectionInfo {
+pub struct SingleSection {
     pub course_id: i32,
     pub title: String,
     pub description: String,

@@ -1,6 +1,6 @@
 use crate::{
     api::AppState,
-    model::{Building, CourseOption, Search, SectionInfo, SectionTimeInfo, Time, WeekDay},
+    model::{Building, CourseOption, Search, SectionTimeInfo, SingleSection, Time, WeekDay},
 };
 use actix_web::{
     post,
@@ -47,8 +47,8 @@ pub async fn get_course_options(state: Data<AppState>, options: Json<Search>) ->
     query_builder.push_bind(options.term);
     query_builder.push_bind(course_number);
 
-    let sections: Vec<SectionInfo> = match query_builder
-        .build_query_as::<SectionInfo>()
+    let sections: Vec<SingleSection> = match query_builder
+        .build_query_as::<SingleSection>()
         .fetch_all(&state.db)
         .await
     {

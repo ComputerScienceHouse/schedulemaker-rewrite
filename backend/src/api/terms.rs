@@ -17,12 +17,12 @@ use sqlx::query_as;
 pub async fn get_terms(state: Data<AppState>) -> impl Responder {
     log!(Level::Info, "GET /terms");
 
-    struct TempTerm {
+    struct Info {
         term: i32,
     }
 
     match query_as!(
-        TempTerm,
+        Info,
         "SELECT DISTINCT term FROM academicterms ORDER BY term DESC",
     )
     .fetch_all(&state.db)
@@ -50,7 +50,7 @@ pub async fn get_terms(state: Data<AppState>) -> impl Responder {
                 terms = terms
                     .into_iter()
                     .filter(|t| t.term % 1000 / 10 != base)
-                    .collect::<Vec<TempTerm>>();
+                    .collect::<Vec<Info>>();
 
                 years.push(Year {
                     year: format!("20{} - 20{}", base, base + 1),

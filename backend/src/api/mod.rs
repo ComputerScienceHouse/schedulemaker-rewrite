@@ -3,8 +3,11 @@ use actix_web::{
     web::{self, scope, Data},
     App, HttpResponse, HttpServer,
 };
+mod courses;
 mod departments;
 mod get_course_options;
+mod schools;
+mod sections;
 mod terms;
 use actix_cors::Cors;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
@@ -21,9 +24,12 @@ pub struct AppState {
 #[derive(OpenApi)]
 #[openapi(
         paths(
-            get_course_options::get_course_options,
-            terms::get_terms,
+        courses::get_courses,
             departments::get_departments,
+            get_course_options::get_course_options,
+            schools::get_schools,
+            sections::get_sections,
+            terms::get_terms,
         ),
         components(
             schemas(
@@ -56,9 +62,12 @@ pub async fn serve() {
             .wrap(cors)
             .service(
                 scope("/api")
-                    .service(get_course_options::get_course_options)
-                    .service(terms::get_terms)
+                    .service(courses::get_courses)
                     .service(departments::get_departments)
+                    .service(get_course_options::get_course_options)
+                    .service(schools::get_schools)
+                    .service(sections::get_sections)
+                    .service(terms::get_terms)
                     .route("/openapi.json", web::get().to(open_api_spec))
                     .service(
                         SwaggerUi::new("/docs/{_:.*}").url("/api/openapi.json", ApiDoc::openapi()),
@@ -66,7 +75,7 @@ pub async fn serve() {
             )
             .app_data(app_data.clone())
     })
-    .bind(("0.0.0.0", 3000))
+    .bind(("0.0.0.0", 8080))
     .unwrap()
     .run()
     .await
