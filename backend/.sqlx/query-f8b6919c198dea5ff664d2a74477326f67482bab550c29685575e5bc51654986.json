@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT t.day, t.start, t.end, b.code as building_code, b.number as building_number, t.room FROM times t, buildings b WHERE t.building = b.number AND t.section = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "day",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 1,
+        "name": "start",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 2,
+        "name": "end",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 3,
+        "name": "building_code",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "building_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "room",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "f8b6919c198dea5ff664d2a74477326f67482bab550c29685575e5bc51654986"
+}

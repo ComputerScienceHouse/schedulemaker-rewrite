@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "INSERT INTO times (section, day, start_time, end_time, building, room) VALUES ($1, $2, $3, $4, $5, $6)",
+  "query": "INSERT INTO times (section, day, start, \"end\", building, room) VALUES ($1, $2, $3, $4, $5, $6)",
   "describe": {
     "columns": [],
     "parameters": {
@@ -15,5 +15,5 @@
     },
     "nullable": []
   },
-  "hash": "b63032f23e47e8c1c8a80ab487e9a7af3c7100f8a95fc8dc1c66227814a66174"
+  "hash": "508acf8711d7ca825f09704e7747dbdd541c01cdd388191ed74398eb1e2dd2e0"
 }
