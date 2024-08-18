@@ -1,6 +1,6 @@
 import Alert from "../components/alert";
 import Reset from "../components/reset";
-import TermSelect from "../components/termselect";
+import TermSelect from "../components/termSelect";
 import SubPage from "./subpage";
 import ScheduleCourse from "../components/scheduleCourse";
 import NonCourse from "../components/nonCourse";
@@ -37,32 +37,32 @@ function Generate() {
               use-class="scheduleCourse"
               helpers="courses_helpers"
             >
-              {React.Children.map(courses, course => React.cloneElement(course, {activeTerm}))}
+              {React.Children.map(courses, course => React.cloneElement(course, { activeTerm }))}
             </div>
           </div>
         </div>
-        <div class="panel-footer">
+        <div className="panel-footer">
           <input
             type="hidden"
             value="1"
             name="courseCount"
             id="courseCount"
-            autocomplete="off"
+            autoComplete="off"
           />
-          <div class="row">
-            <div class="col-md-4 col-xs-6">
-              <button type="button" class="btn-default btn btn-block">
-              <FontAwesomeIcon icon={icon({name: "square", style: "regular"})}/> Ignore full
+          <div className="row">
+            <div className="col-md-4 col-xs-6">
+              <button type="button" className="btn-default btn btn-block">
+                <FontAwesomeIcon icon={icon({ name: "square", style: "regular" })} /> Ignore full
               </button>
             </div>
-            <div class="col-md-4 col-md-offset-4 col-xs-6">
+            <div className="col-md-4 col-md-offset-4 col-xs-6">
               <button
-                class="btn btn-primary btn-block"
+                className="btn btn-primary btn-block"
                 type="button"
                 title="Shortcut: Enter"
                 onClick={() => setCourses([...courses, <ScheduleCourse />])}
               >
-                <FontAwesomeIcon icon={icon({name: "plus"})}/> Add Course
+                <FontAwesomeIcon icon={icon({ name: "plus" })} /> Add Course
               </button>
             </div>
           </div>
@@ -70,43 +70,43 @@ function Generate() {
       </TermSelect>
       <div>&nbsp;</div>
       <div>
-        <div class="panel panel-default panel-control-overlap">
-          <div class="panel-heading form-horizontal">
-            <div class="form-horizontal row">
-              <div class="col-xs-12">
-                <h2 class="panel-title">Non-Course Schedule Items</h2>
+        <div className="panel panel-default panel-control-overlap">
+          <div className="panel-heading form-horizontal">
+            <div className="form-horizontal row">
+              <div className="col-xs-12">
+                <h2 className="panel-title">Non-Course Schedule Items</h2>
               </div>
             </div>
           </div>
-          <div class={nonSchedule.length === 0 ? "panel-body ng-hide" : "panel-body"} hidden={nonSchedule.length === 0}>
+          <div className={nonSchedule.length === 0 ? "panel-body ng-hide" : "panel-body"} hidden={nonSchedule.length === 0}>
             {nonSchedule}
           </div>
-          <div class="panel-footer">
-            <div class="row">
-              <div class="col-md-4 col-md-offset-8">
-                <button type="button" class="btn btn-block btn-primary" onClick={() => setNonSchedule([...nonSchedule, <NonCourse/>])}>
-                  <FontAwesomeIcon icon={icon({name: "plus"})}/> Add Item
+          <div className="panel-footer">
+            <div className="row">
+              <div className="col-md-4 col-md-offset-8">
+                <button type="button" className="btn btn-block btn-primary" onClick={() => setNonSchedule([...nonSchedule, <NonCourse />])}>
+                  <FontAwesomeIcon icon={icon({ name: "plus" })} /> Add Item
                 </button>
               </div>
             </div>
           </div>
         </div>
-        <div class="panel panel-default panel-control-overlap">
-          <div class="panel-heading form-horizontal">
-            <div class="form-horizontal row">
-              <div class="col-xs-12">
-                <h2 class="panel-title">Times You Don't Want Classes</h2>
+        <div className="panel panel-default panel-control-overlap">
+          <div className="panel-heading form-horizontal">
+            <div className="form-horizontal row">
+              <div className="col-xs-12">
+                <h2 className="panel-title">Times You Don't Want Classes</h2>
               </div>
             </div>
           </div>
-          <div class={noSchedule.length === 0 ? "panel-body ng-hide" : "panel-body"} hidden={noSchedule.length === 0}>
+          <div className={noSchedule.length === 0 ? "panel-body ng-hide" : "panel-body"} hidden={noSchedule.length === 0}>
             {noSchedule}
           </div>
-          <div class="panel-footer">
-            <div class="row">
-              <div class="col-md-4 col-md-offset-8">
-                <button type="button" class="btn btn-block btn-primary" onClick={() => setNoSchedule([...noSchedule, <NoCourse/>])}>
-                  <i class="plus"></i> Add Item
+          <div className="panel-footer">
+            <div className="row">
+              <div className="col-md-4 col-md-offset-8">
+                <button type="button" className="btn btn-block btn-primary" onClick={() => setNoSchedule([...noSchedule, <NoCourse />])}>
+                  <i className="plus"></i> Add Item
                 </button>
               </div>
             </div>

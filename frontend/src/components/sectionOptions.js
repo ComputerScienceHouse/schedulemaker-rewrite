@@ -2,33 +2,33 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 const numToDay = {
-    0: "Sun",
-    1: "Mon",
-    2: "Tue",
-    3: "Wed",
-    4: "Thu",
-    5: "Fri",
-    6: "Sat",
+  0: "Sun",
+  1: "Mon",
+  2: "Tue",
+  3: "Wed",
+  4: "Thu",
+  5: "Fri",
+  6: "Sat",
 };
 
 function minutesToTime(mins) {
-    var h = Math.floor(mins / 60);
-    var m = mins % 60;
-    var ampm = "am";
-    if (h === 24) {
-      h = 12;
-    } else if (h >= 12) {
-      ampm = "pm";
-      h = h - 12;
-    }
-    if (h === 0) {
-      h = 12;
-    }
-    if (m < 10) {
-      m = "0" + m;
-    }
-    return `${h}:${m}${ampm}`;
+  var h = Math.floor(mins / 60);
+  var m = mins % 60;
+  var ampm = "am";
+  if (h === 24) {
+    h = 12;
+  } else if (h >= 12) {
+    ampm = "pm";
+    h = h - 12;
   }
+  if (h === 0) {
+    h = 12;
+  }
+  if (m < 10) {
+    m = "0" + m;
+  }
+  return `${h}:${m}${ampm}`;
+}
 
 const sectionOptions = (props) => {
   let out = [];
@@ -38,25 +38,25 @@ const sectionOptions = (props) => {
     let end = days.length > 0 ? minutesToTime(props.options[i].times[0].end) : "N/A";
     out.push(
       <div
-        class="inline-col col-md-6 ng-scope"
+        className="inline-col col-md-6 ng-scope"
         ng-repeat="section in item.sections"
       >
-        <ul class="list-group">
-          <li class="list-group-item course-info">
-            <div class="row">
-              <div class="col-sm-8">
-                <h4 class="list-group-item-heading">
+        <ul className="list-group">
+          <li className="list-group-item course-info">
+            <div className="row">
+              <div className="col-sm-8">
+                <h4 className="list-group-item-heading">
                   <span
                     course-detail-popover="section.id"
-                    class="ng-binding ng-isolate-scope"
+                    className="ng-binding ng-isolate-scope"
                   >
-                    {i+1}. {props.options[i].courseNum}
+                    {i + 1}. {props.options[i].courseNum}
                   </span>
                 </h4>
-                <small class="ng-binding">{props.options[i].title}</small>
-                <p class="list-group-item-text label-line">
+                <small className="ng-binding">{props.options[i].title}</small>
+                <p className="list-group-item-text label-line">
                   <span
-                    class="label label-default label-professor ng-binding"
+                    className="label label-default label-professor ng-binding"
                     ng-bind-html="section.instructor | RMPUrl"
                   >
                     <a
@@ -71,40 +71,40 @@ const sectionOptions = (props) => {
                 <div ng-init="parsedTimes = (section.times | parseSectionTimes)">
                   <div
                     ng-repeat="time in parsedTimes"
-                    style={{"font-size":"small"}}
-                    class="ng-binding ng-scope"
+                    style={{ "font-size": "small" }}
+                    className="ng-binding ng-scope"
                   >
                     {days}{" "}
-                    <span style={{"white-space":"nowrap"}} class="ng-binding">
+                    <span style={{ "white-space": "nowrap" }} className="ng-binding">
                       {days.length > 0 ? `${start} - ${end}` : ""}
                     </span>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-4">
-                <div class="row">
-                  <div class="col-xs-12">
+              <div className="col-sm-4">
+                <div className="row">
+                  <div className="col-xs-12">
                     <button
                       type="button"
-                      class="btn btn-block btn-danger"
+                      className="btn btn-block btn-danger"
                       ng-click="section.selected = !section.selected"
-                      ng-class="{'btn-danger':section.selected, 'btn-success':!section.selected}"
+                      ng-className="{'btn-danger':section.selected, 'btn-success':!section.selected}"
                     >
                       <i
-                        class="minus"
-                        ng-class="{'fa-minus':section.selected, 'fa-plus':!section.selected}"
+                        className="minus"
+                        ng-className="{'fa-minus':section.selected, 'fa-plus':!section.selected}"
                       ></i>{" "}
-                      <FontAwesomeIcon icon={icon({name: "shopping-cart"})}/>
+                      <FontAwesomeIcon icon={icon({ name: "shopping-cart" })} />
                     </button>
                   </div>
                 </div>
-                <div class="text-center">
+                <div className="text-center">
                   <div
-                    class="well-sm ng-binding"
-                    style={{background: "#ddd", margin: "8px 0"}}
+                    className="well-sm ng-binding"
+                    style={{ background: "#ddd", margin: "8px 0" }}
                     title="Other students enrolled as of 6AM today"
                   >
-                    {props.options[i].curenroll}/{props.options[i].maxenroll} <FontAwesomeIcon icon={icon({name: "user"})}/>
+                    {props.options[i].curenroll}/{props.options[i].maxenroll} <FontAwesomeIcon icon={icon({ name: "user" })} />
                   </div>
                 </div>
               </div>
@@ -117,13 +117,13 @@ const sectionOptions = (props) => {
   return (
     <div
       ng-if="showResults &amp;&amp; !item.sections[0].isError"
-      class="ng-scope"
+      className="ng-scope"
     >
-      <div class="visible-xs visible-sm vert-spacer-static-md"></div>
-      <div class="course-results-cont row">
+      <div className="visible-xs visible-sm vert-spacer-static-md"></div>
+      <div className="course-results-cont row">
         {out}
       </div>
-      <div class="visible-xs visible-sm vert-spacer-md"></div>
+      <div className="visible-xs visible-sm vert-spacer-md"></div>
     </div>
   );
 };

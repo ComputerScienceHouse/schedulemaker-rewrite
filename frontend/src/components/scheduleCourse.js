@@ -8,7 +8,7 @@ const EnterCourse = (
   <button
     title="Shortcut: Ctrl + Alt + Down"
     type="button"
-    class="btn btn-primary btn-block"
+    className="btn btn-primary btn-block"
     disabled="disabled"
   >
     Please enter a course
@@ -16,19 +16,19 @@ const EnterCourse = (
 );
 
 const NoMatches = (
-  <button class="btn btn-block course-error alert alert-danger alert-sm">No Courses Match</button>
+  <button className="btn btn-block course-error alert alert-danger alert-sm">No Courses Match</button>
 )
 
 const CourseResults = (props) => {
   let action = props.opened ? "Hide" : "Show";
-  let openedIcon = props.opened ? icon({name: "angle-up"}) : icon({name: "angle-down"})
+  let openedIcon = props.opened ? icon({ name: "angle-up" }) : icon({ name: "angle-down" })
   return (
     <button
       title="Shortcut: Ctrl + Alt + Down"
       type="button"
-      class="btn btn-primary btn-block"
+      className="btn btn-primary btn-block"
     >
-      <FontAwesomeIcon icon={openedIcon}/> {action} {props.num} Results
+      <FontAwesomeIcon icon={openedIcon} /> {action} {props.num} Results
     </button>
   );
 };
@@ -38,7 +38,7 @@ const ScheduleCourse = (props) => {
   const [courseStatus, setCourseStatus] = useState(EnterCourse);
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadIcon, setLoadIcon] = useState(<FontAwesomeIcon icon={icon({name: "times"})}/>);
+  const [loadIcon, setLoadIcon] = useState(<FontAwesomeIcon icon={icon({ name: "times" })} />);
 
   const updateCourse = (e) => {
     setCourseData(e.target.value);
@@ -75,36 +75,36 @@ const ScheduleCourse = (props) => {
 
   useEffect(() => {
     if (loading) {
-      setLoadIcon(<FontAwesomeIcon icon={icon({name: "rotate"})} spin/>);
+      setLoadIcon(<FontAwesomeIcon icon={icon({ name: "rotate" })} spin />);
     } else {
-      setLoadIcon(<FontAwesomeIcon icon={icon({name: "times"})}/>);
+      setLoadIcon(<FontAwesomeIcon icon={icon({ name: "times" })} />);
     }
   }, [loading]);
 
   return (
-    <div class="scheduleCourse repeat-item no-repeat-item-animation">
-      <div class="row margin-bottom-sm">
-        <div class="col-md-8">
-          <div class="form-group">
-            <div class="col-sm-12 col-xs-12">
-              <div class="input-group">
+    <div className="scheduleCourse repeat-item no-repeat-item-animation">
+      <div className="row margin-bottom-sm">
+        <div className="col-md-8">
+          <div className="form-group">
+            <div className="col-sm-12 col-xs-12">
+              <div className="input-group">
                 <input
-                  autocapitalize="off"
-                  autocorrect="off"
-                  spellcheck="off"
-                  autocomplete="off"
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  spellCheck="off"
+                  autoComplete="off"
                   id="courses1"
-                  class="form-control searchField mousetrap"
+                  className="form-control searchField mousetrap"
                   type="text"
                   name="courses1"
                   placeholder="DEPT-CRS-SECT, DEPT-CRS-SECT..."
                   onChange={updateCourse}
                 />{" "}
-                <span class="input-group-btn">
+                <span className="input-group-btn">
                   <button
                     title="Shortcut: Esc"
                     type="button"
-                    class="btn btn-default"
+                    className="btn btn-default"
                   >
                     {loadIcon}
                   </button>
@@ -113,15 +113,15 @@ const ScheduleCourse = (props) => {
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="form-group course-result hidden-xs hidden-sm">
-            <div class="col-xs-12">
+        <div className="col-md-4">
+          <div className="form-group course-result hidden-xs hidden-sm">
+            <div className="col-xs-12">
               {courseStatus}
             </div>
           </div>
         </div>
       </div>
-      <SectionOptions options={options}/>
+      <SectionOptions options={options} />
     </div>
   );
 };

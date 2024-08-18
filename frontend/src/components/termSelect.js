@@ -7,7 +7,7 @@ const TermSelect = (props) => {
       let termData = await fetch("/api/terms", {
         method: "GET"
       }).then((res) => {
-        if (res.status === 200) {
+        if (res.ok()) {
           return res.json();
         } else {
           throw new Error("Unable to get terms");
@@ -26,16 +26,16 @@ const TermSelect = (props) => {
     <div className="panel panel-default form-horizontal">
       <div className="panel-heading">
         <div className="row form-horizontal">
-          <div class="col-sm-4 col-xs-6">
-            <h2 class="panel-title control-label pull-left">{props.title}</h2>
+          <div className="col-sm-4 col-xs-6">
+            <h2 className="panel-title control-label pull-left">{props.title}</h2>
           </div>
-          <div class="col-sm-8 col-xs-6">
-            <div class="row">
-              <label class="col-sm-6 control-label hidden-xs" for="term">
+          <div className="col-sm-8 col-xs-6">
+            <div className="row">
+              <label className="col-sm-6 control-label hidden-xs" htmlFor="term">
                 Term:
               </label>
-              <div class="col-sm-6">
-                <select className="form-control" onChange={e => props.setActiveTerm(Number(e.target.value))}>
+              <div className="col-sm-6">
+                <select className="form-control" onChange={e => props.setActiveTerm(Number(e.target.value))} defaultValue={"Fall 2024"}>
                   {terms.map((entry) => {
                     const [_, e] = entry;
                     return (
@@ -56,7 +56,7 @@ const TermSelect = (props) => {
       </div>
       {
         React.Children.map(
-          props.children, child => React.cloneElement(child, { activeTerm: props.activeTerm })
+          props.children, child => React.cloneElement(child, { activeterm: props.activeTerm })
         )
       }
     </div>

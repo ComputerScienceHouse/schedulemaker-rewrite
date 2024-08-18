@@ -30,23 +30,23 @@ const NoCourse = () => {
     );
   }
   return (
-    <div class="container row form-group repeat-item">
-      <div class="hidden-lg vert-spacer-static-md"></div>
-      <div class="col-lg-5 col-md-6 col-sm-6">
-        <div class="row form-inline">
-          <div class="col-xs-12">
-            <div class="form-group inline-sm">
-              <select id="options-startTime" class="form-control">
-                <option value="" class="" disabled selected="selected">
+    <div className="container row form-group repeat-item">
+      <div className="hidden-lg vert-spacer-static-md"></div>
+      <div className="col-lg-5 col-md-6 col-sm-6">
+        <div className="row form-inline">
+          <div className="col-xs-12">
+            <div className="form-group inline-sm">
+              <select id="options-startTime" className="form-control">
+                <option value="" className="" disabled selected="selected">
                   Start
                 </option>
                 {times}
               </select>
             </div>
-            <div class="form-group inline-sm">&nbsp;to&nbsp;</div>
-            <div class="form-group inline-sm">
-              <select id="options-endTime" class="form-control">
-                <option value="" class="" disabled selected="selected">
+            <div className="form-group inline-sm">&nbsp;to&nbsp;</div>
+            <div className="form-group inline-sm">
+              <select id="options-endTime" className="form-control">
+                <option value="" className="" disabled selected="selected">
                   End
                 </option>
                 {times}
@@ -55,44 +55,44 @@ const NoCourse = () => {
           </div>
         </div>
       </div>
-      <div class="hidden-lg vert-spacer-static-md"></div>
-      <div class="col-lg-4 col-sm-5">
-        <div class="container-fluid">
+      <div className="hidden-lg vert-spacer-static-md"></div>
+      <div className="col-lg-4 col-sm-5">
+        <div className="container-fluid">
           <div dow-select-fields="nonCourse.days">
-            <div class="btn-group btn-group-dow">
-              <button type="button" class="btn btn-default btn-dow">
+            <div className="btn-group btn-group-dow">
+              <button type="button" className="btn btn-default btn-dow">
                 Su
               </button>
-              <button type="button" class="btn btn-default btn-dow">
+              <button type="button" className="btn btn-default btn-dow">
                 Mo
               </button>
-              <button type="button" class="btn btn-default btn-dow">
+              <button type="button" className="btn btn-default btn-dow">
                 Tu
               </button>
-              <button type="button" class="btn btn-default btn-dow">
+              <button type="button" className="btn btn-default btn-dow">
                 We
               </button>
-              <button type="button" class="btn btn-default btn-dow">
+              <button type="button" className="btn btn-default btn-dow">
                 Th
               </button>
-              <button type="button" class="btn btn-default btn-dow">
+              <button type="button" className="btn btn-default btn-dow">
                 Fr
               </button>
-              <button type="button" class="btn btn-default btn-dow">
+              <button type="button" className="btn btn-default btn-dow">
                 Sa
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div class="hidden-md hidden-lg vert-spacer-static-md"></div>
-      <div class="col-sm-1">
-        <div class="container-fluid">
-          <button type="button" class="btn btn-danger hidden-xs">
-            <FontAwesomeIcon icon={icon({name: "times"})}/>
+      <div className="hidden-md hidden-lg vert-spacer-static-md"></div>
+      <div className="col-sm-1">
+        <div className="container-fluid">
+          <button type="button" className="btn btn-danger hidden-xs">
+            <FontAwesomeIcon icon={icon({ name: "times" })} />
           </button>{" "}
-          <button type="button" class="btn btn-danger btn-block visible-xs">
-            <FontAwesomeIcon icon={icon({name: "times"})}/> Delete
+          <button type="button" className="btn btn-danger btn-block visible-xs">
+            <FontAwesomeIcon icon={icon({ name: "times" })} /> Delete
           </button>
         </div>
       </div>

@@ -1,31 +1,31 @@
 import Reset from "../components/reset";
-import TermSelect from "../components/termselect";
+import TermSelect from "../components/termSelect";
 import SubPage from "./subpage";
 
 function Search() {
   return (
     <SubPage>
       <TermSelect title="Search Courses">
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
+        <div className="panel-body">
+          <div className="row">
+            <div className="col-md-6">
+              <div className="form-group">
                 <label
-                  class="control-label col-sm-4"
-                  for="search.params.college"
+                  className="control-label col-sm-4"
+                  htmlFor="search.params.college"
                 >
                   College:
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <select
                     id="search.params.college"
                     name="college"
-                    class="mousetrap form-control"
+                    className="mousetrap form-control"
+                    defaultValue=""
                   >
                     <option
                       label="Any College"
                       value="string:any"
-                      selected="selected"
                     >
                       Any College
                     </option>
@@ -118,24 +118,24 @@ function Search() {
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
+            <div className="col-md-6">
+              <div className="form-group">
                 <label
-                  class="control-label col-sm-4"
-                  for="search.params.department"
+                  className="control-label col-sm-4"
+                  htmlFor="search.params.department"
                 >
                   Department:
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <select
                     id="search.params.department"
                     name="department"
-                    class="mousetrap form-control"
+                    className="mousetrap form-control"
+                    defaultValue=""
                   >
                     <option
                       label="Any Department"
                       value="string:any"
-                      selected="selected"
                     >
                       Any Department
                     </option>
@@ -144,37 +144,38 @@ function Search() {
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
+          <div className="row">
+            <div className="col-md-6">
+              <div className="form-group">
                 <label
-                  class="control-label col-sm-4"
-                  for="search.params.credits"
+                  className="control-label col-sm-4"
+                  htmlFor="search.params.credits"
                 >
                   Credit Hours:
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <input
                     type="text"
-                    maxlength="2"
+                    maxLength="2"
                     size="3"
                     id="search.params.credits"
                     name="credits"
-                    class="mousetrap form-control"
+                    className="mousetrap form-control"
                   />
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label col-sm-4" for="search.params.level">
+            <div className="col-md-6">
+              <div className="form-group">
+                <label className="control-label col-sm-4" htmlFor="search.params.level">
                   Level:
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <select
                     id="search.params.level"
                     name="level"
-                    class="form-control"
+                    className="form-control"
+                    defaultValue=""
                   >
                     <option value="any">Any Level</option>
                     <option value="beg">Introductory (0 - 300)</option>
@@ -185,75 +186,75 @@ function Search() {
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label col-sm-4" for="search.params.title">
+          <div className="row">
+            <div className="col-md-6">
+              <div className="form-group">
+                <label className="control-label col-sm-4" htmlFor="search.params.title">
                   Title:
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <input
                     type="text"
                     id="search.params.title"
                     name="title"
-                    class="mousetrap form-control"
+                    className="mousetrap form-control"
                   />
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
+            <div className="col-md-6">
+              <div className="form-group">
                 <label
-                  class="control-label col-sm-4"
-                  for="search.params.professor"
+                  className="control-label col-sm-4"
+                  htmlFor="search.params.professor"
                 >
                   Professor:
                 </label>
-                <div class="col-sm-8">
+                <div className="col-sm-8">
                   <input
                     type="text"
                     id="search.params.professor"
                     name="professor"
-                    class="mousetrap form-control"
+                    className="mousetrap form-control"
                   />
                 </div>
               </div>
             </div>
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <label
-              class="control-label col-sm-4"
-              for="search.params.description"
+              className="control-label col-sm-4"
+              htmlFor="search.params.description"
             >
               Keywords:
             </label>
-            <div class="col-sm-8">
+            <div className="col-sm-8">
               <input
                 type="text"
                 id="search.params.description"
                 name="description"
-                class="mousetrap form-control"
+                className="mousetrap form-control"
                 placeholder="(comma delmited)"
               />
             </div>
           </div>
-          <div class="form-group">
-            <label class="control-label col-md-4">Days:</label>
-            <div class="col-md-8">
+          <div className="form-group">
+            <label className="control-label col-md-4">Days:</label>
+            <div className="col-md-8">
               <div
                 dow-select-fields="search.params.days"
               >
-                <div class="btn-group btn-group-dow">
+                <div className="btn-group btn-group-dow">
                   <button
                     type="button"
-                    class="btn btn-default btn-dow"
+                    className="btn btn-default btn-dow"
                   >
                     Su
                   </button>
                   <button
                     type="button"
 
-                    class="btn btn-default btn-dow"
+                    className="btn btn-default btn-dow"
 
                   >
                     Mo
@@ -261,7 +262,7 @@ function Search() {
                   <button
                     type="button"
 
-                    class="btn btn-default btn-dow"
+                    className="btn btn-default btn-dow"
 
                   >
                     Tu
@@ -269,7 +270,7 @@ function Search() {
                   <button
                     type="button"
 
-                    class="btn btn-default btn-dow"
+                    className="btn btn-default btn-dow"
 
                   >
                     We
@@ -277,7 +278,7 @@ function Search() {
                   <button
                     type="button"
 
-                    class="btn btn-default btn-dow "
+                    className="btn btn-default btn-dow "
 
                   >
                     Th
@@ -285,7 +286,7 @@ function Search() {
                   <button
                     type="button"
 
-                    class="btn btn-default btn-dow"
+                    className="btn btn-default btn-dow"
 
                   >
                     Fr
@@ -293,7 +294,7 @@ function Search() {
                   <button
                     type="button"
 
-                    class="btn btn-default btn-dow "
+                    className="btn btn-default btn-dow "
 
                   >
                     Sa
@@ -302,75 +303,75 @@ function Search() {
               </div>
             </div>
           </div>
-          <div class="form-group">
-            <label class="control-label col-md-4">Times:</label>
-            <div class="col-md-8">
-              <div class="btn-group">
+          <div className="form-group">
+            <label className="control-label col-md-4">Times:</label>
+            <div className="col-md-8">
+              <div className="btn-group">
                 <button
                   type="button"
 
-                  class="btn btn-default"
+                  className="btn btn-default"
                 >
                   Morning
                 </button>
                 <button
                   type="button"
 
-                  class="btn btn-default"
+                  className="btn btn-default"
                 >
                   Afternoon
                 </button>
                 <button
                   type="button"
 
-                  class="btn btn-default"
+                  className="btn btn-default"
                 >
                   Night
                 </button>
               </div>
             </div>
           </div>
-          <div class="form-group">
-            <label class="control-label col-sm-4" for="online">
+          <div className="form-group">
+            <label className="control-label col-sm-4" htmlFor="online">
               Course Options:
             </label>
-            <div class="col-sm-8">
-              <div class="row">
-                <div class="col-sm-4">
+            <div className="col-sm-8">
+              <div className="row">
+                <div className="col-sm-4">
                   <button
                     type="button"
 
-                    class="btn btn-default btn-block btn-success"
+                    className="btn btn-default btn-block btn-success"
                   >
                     Online{" "}
                     <i
-                      class="fa fa-square-o fa-check-square"
+                      className="fa fa-square-o fa-check-square"
                     ></i>
                   </button>
                 </div>
-                <div class="vert-spacer-static-md visible-xs"></div>
-                <div class="col-sm-4">
+                <div className="vert-spacer-static-md visible-xs"></div>
+                <div className="col-sm-4">
                   <button
                     type="button"
 
-                    class="btn btn-default btn-block btn-success"
+                    className="btn btn-default btn-block btn-success"
                   >
                     Honors{" "}
                     <i
-                      class="fa fa-square-o fa-check-square"
+                      className="fa fa-square-o fa-check-square"
                     ></i>
                   </button>
                 </div>
-                <div class="vert-spacer-static-md visible-xs"></div>
-                <div class="col-sm-4">
+                <div className="vert-spacer-static-md visible-xs"></div>
+                <div className="col-sm-4">
                   <button
                     type="button"
 
-                    class="btn btn-default btn-block"
+                    className="btn btn-default btn-block"
                   >
                     Off Campus{" "}
                     <i
-                      class="fa fa-square-o"
+                      className="fa fa-square-o"
                     ></i>
                   </button>
                 </div>

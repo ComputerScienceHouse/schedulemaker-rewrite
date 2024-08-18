@@ -2,19 +2,19 @@ import CourseCart from "../components/coursecart";
 const SubPage = (props) => {
     return (
         <div id="container">
-            <div ui-view autoscroll="false" style={null}>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-8 clearfix">
+            <div ui-view="true" autoscroll="false" style={null}>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-8 clearfix">
                             {props.children}
                         </div>
-                        <div class="col-md-4 pinned-track">
+                        <div className="col-md-4 pinned-track">
                             <CourseCart />
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="vert-spacer-static-md"></div>
+            <div className="vert-spacer-static-md"></div>
         </div>
     );
 }
