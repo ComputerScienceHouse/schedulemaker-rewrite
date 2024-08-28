@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-const TermSelect = (props) => {
+const TermSelect = (props: any) => {
   let [terms, setTerms] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       let termData = await fetch("/api/terms", {
-        method: "GET"
-      }).then((res) => {
-        if (res.ok()) {
-          return res.json();
-        } else {
-          throw new Error("Unable to get terms");
+        method: "GET",
+        headers: {
+          'Content-Type': "application/json"
         }
-      }).then((data) => {
-        return Object.entries(data);
-      }).catch((err) => {
-        return [];
-      });
-      setTerms(termData);
-      props.activeTerm = termData[0][1].terms[0].termId;
+      }).then((res) => res.json()).then((data) => { return data; }).catch((err) => { console.log(err); throw new Error("Unable to retrieve terms") });
+      setTerms(termData());
+      props.activeTerm = termData[0].terms[0].termId;
     }
     fetchData();
   }, [props]);
@@ -36,11 +29,10 @@ const TermSelect = (props) => {
               </label>
               <div className="col-sm-6">
                 <select className="form-control" onChange={e => props.setActiveTerm(Number(e.target.value))} defaultValue={"Fall 2024"}>
-                  {terms.map((entry) => {
-                    const [_, e] = entry;
+                  {terms.map((entry: { year: number, terms: Array<{ termId: number, termName: string }> }) => {
                     return (
-                      <optgroup label={e.year}>
-                        {e.terms.map((term) =>
+                      <optgroup label={`${entry.year}`}>
+                        {entry.terms.map((term) =>
                           <option value={term.termId}>
                             {term.termName}
                           </option>

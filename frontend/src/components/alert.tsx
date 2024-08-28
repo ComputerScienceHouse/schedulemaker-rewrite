@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import React, { useState } from "react";
 
-const Alert = (props) => {
+const Alert = (props: any) => {
   const [hidden, setHidden] = useState(false);
   return (
     <div className="alert alert-info" hidden={hidden}>

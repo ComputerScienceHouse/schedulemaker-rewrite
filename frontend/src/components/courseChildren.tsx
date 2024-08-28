@@ -1,8 +1,8 @@
-const getCourseChildren = async (searchData, setLoading) => {
+const getCourseChildren = async (searchData: any, setLoading: any) => {
     setLoading(true);
     return await fetch("/api/generate/getCourseOpts", {
         method: "POST",
-        headers: {'Content-Type':'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(searchData),
     }).then((res) => {
         if (res.status === 200) {

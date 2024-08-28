@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import React from "react";
 
 const CourseCart = () => {
   return (
@@ -19,7 +20,7 @@ const CourseCart = () => {
                 <button
                   type="button"
                   className="btn btn-danger pull-right"
-                  disabled="disabled"
+                  disabled={true}
                 >
                   <FontAwesomeIcon icon={icon({ name: "minus" })} />
                   <FontAwesomeIcon icon={icon({ name: "shopping-cart" })} /> All
@@ -33,16 +34,13 @@ const CourseCart = () => {
               type="button"
               className="btn btn-xs btn-primary hidden-md hidden-lg pull-right"
             >
-              <FontAwesomeIcon icon={icon({ name: "angle-down" })} style={null} />
+              <FontAwesomeIcon icon={icon({ name: "angle-down" })} />
             </button>
           </h2>
         </div>
-        <div
-          className="panel-body course-cart-window hidden-xs hidden-sm"
-          style={null}
-        >
+        <div className="panel-body course-cart-window hidden-xs hidden-sm">
           <div className="animate-show-hide">
-            <div className="alert" style={null}>
+            <div className="alert">
               Add courses to your cart and make a schedule with them. They will
               show up here.
             </div>

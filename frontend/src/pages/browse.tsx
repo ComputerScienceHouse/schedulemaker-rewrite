@@ -5,6 +5,7 @@ import TermSelect from "../components/termSelect";
 import SubPage from "./subpage";
 import { Link } from 'react-router-dom'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import React from "react";
 
 function Browse() {
     return (

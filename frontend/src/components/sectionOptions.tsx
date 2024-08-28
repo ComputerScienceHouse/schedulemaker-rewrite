@@ -1,19 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import React from "react";
 
-const numToDay = {
-  0: "Sun",
-  1: "Mon",
-  2: "Tue",
-  3: "Wed",
-  4: "Thu",
-  5: "Fri",
-  6: "Sat",
-};
+const numToDay = [
+  "Sun",
+  "Mon",
+  "Tue",
+  "Wed",
+  "Thu",
+  "Fri",
+  "Sat",
+];
 
-function minutesToTime(mins) {
+function minutesToTime(mins: number) {
   var h = Math.floor(mins / 60);
-  var m = mins % 60;
+  var m: string = `${mins % 60}`;
   var ampm = "am";
   if (h === 24) {
     h = 12;
@@ -24,16 +25,16 @@ function minutesToTime(mins) {
   if (h === 0) {
     h = 12;
   }
-  if (m < 10) {
+  if (mins % 60 < 10) {
     m = "0" + m;
   }
   return `${h}:${m}${ampm}`;
 }
 
-const sectionOptions = (props) => {
-  let out = [];
+const sectionOptions = (props: any) => {
+  let out: Array<React.JSX.Element> = [];
   for (let i = 0; i < props.options.length; i++) {
-    let days = props.options[i].times.map((time) => numToDay[time.day]).toString();
+    let days = props.options[i].times.map((time: { day: number }) => numToDay[time.day]).toString();
     let start = days.length > 0 ? minutesToTime(props.options[i].times[0].start) : "N/A";
     let end = days.length > 0 ? minutesToTime(props.options[i].times[0].end) : "N/A";
     out.push(
@@ -71,11 +72,11 @@ const sectionOptions = (props) => {
                 <div ng-init="parsedTimes = (section.times | parseSectionTimes)">
                   <div
                     ng-repeat="time in parsedTimes"
-                    style={{ "font-size": "small" }}
+                    style={{ fontSize: "small" }}
                     className="ng-binding ng-scope"
                   >
                     {days}{" "}
-                    <span style={{ "white-space": "nowrap" }} className="ng-binding">
+                    <span style={{ whiteSpace: "nowrap" }} className="ng-binding">
                       {days.length > 0 ? `${start} - ${end}` : ""}
                     </span>
                   </div>

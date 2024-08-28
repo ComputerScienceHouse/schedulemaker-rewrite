@@ -3,13 +3,14 @@ import getCourseChildren from "../components/courseChildren";
 import SectionOptions from "../components/sectionOptions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import React from "react";
 
 const EnterCourse = (
   <button
     title="Shortcut: Ctrl + Alt + Down"
     type="button"
     className="btn btn-primary btn-block"
-    disabled="disabled"
+    disabled={true}
   >
     Please enter a course
   </button>
@@ -19,7 +20,7 @@ const NoMatches = (
   <button className="btn btn-block course-error alert alert-danger alert-sm">No Courses Match</button>
 )
 
-const CourseResults = (props) => {
+const CourseResults = (props: any) => {
   let action = props.opened ? "Hide" : "Show";
   let openedIcon = props.opened ? icon({ name: "angle-up" }) : icon({ name: "angle-down" })
   return (
@@ -33,14 +34,14 @@ const CourseResults = (props) => {
   );
 };
 
-const ScheduleCourse = (props) => {
+const ScheduleCourse = (props: any) => {
   const [courseData, setCourseData] = useState("");
   const [courseStatus, setCourseStatus] = useState(EnterCourse);
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadIcon, setLoadIcon] = useState(<FontAwesomeIcon icon={icon({ name: "times" })} />);
 
-  const updateCourse = (e) => {
+  const updateCourse = (e: any) => {
     setCourseData(e.target.value);
   };
 
@@ -91,7 +92,7 @@ const ScheduleCourse = (props) => {
                 <input
                   autoCapitalize="off"
                   autoCorrect="off"
-                  spellCheck="off"
+                  spellCheck="false"
                   autoComplete="off"
                   id="courses1"
                   className="form-control searchField mousetrap"

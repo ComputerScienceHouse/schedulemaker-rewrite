@@ -1,6 +1,7 @@
 import Reset from "../components/reset";
 import TermSelect from "../components/termSelect";
 import SubPage from "./subpage";
+import React from "react";
 
 function Search() {
   return (
@@ -156,8 +157,8 @@ function Search() {
                 <div className="col-sm-8">
                   <input
                     type="text"
-                    maxLength="2"
-                    size="3"
+                    maxLength={2}
+                    size={3}
                     id="search.params.credits"
                     name="credits"
                     className="mousetrap form-control"

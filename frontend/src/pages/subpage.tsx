@@ -1,8 +1,10 @@
 import CourseCart from "../components/coursecart";
-const SubPage = (props) => {
+import React from "react";
+
+const SubPage = (props: any) => {
     return (
         <div id="container">
-            <div ui-view="true" autoscroll="false" style={null}>
+            <div ui-view="true">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8 clearfix">

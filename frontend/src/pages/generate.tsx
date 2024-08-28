@@ -33,9 +33,8 @@ function Generate() {
           <div id="scheduleCourses">
             <div
               dynamic-items="state.courses"
-              colors="ui.colors"
+              color="ui.colors"
               use-class="scheduleCourse"
-              helpers="courses_helpers"
             >
               {React.Children.map(courses, course => React.cloneElement(course, { activeTerm }))}
             </div>
@@ -84,7 +83,7 @@ function Generate() {
           <div className="panel-footer">
             <div className="row">
               <div className="col-md-4 col-md-offset-8">
-                <button type="button" className="btn btn-block btn-primary" onClick={() => setNonSchedule([...nonSchedule, <NonCourse />])}>
+                <button type="button" className="btn btn-block btn-primary">
                   <FontAwesomeIcon icon={icon({ name: "plus" })} /> Add Item
                 </button>
               </div>
@@ -105,7 +104,7 @@ function Generate() {
           <div className="panel-footer">
             <div className="row">
               <div className="col-md-4 col-md-offset-8">
-                <button type="button" className="btn btn-block btn-primary" onClick={() => setNoSchedule([...noSchedule, <NoCourse />])}>
+                <button type="button" className="btn btn-block btn-primary">
                   <i className="plus"></i> Add Item
                 </button>
               </div>

@@ -1,17 +1,18 @@
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import React from 'react';
 
 function Index() {
   return (
     <div id="container">
-      <div ui-view="" autoscroll="false" style={null}>
+      <div ui-view="">
         <div className="container">
           <div id="mainMenu" className="row">
             <div className="col-xs-4">
               <div className="navItem">
-                <Link  to="/generate">
-                  <FontAwesomeIcon icon={icon({name: 'calendar', style: 'regular'})} size="10x"/>
+                <Link to="/generate">
+                  <FontAwesomeIcon icon={icon({ name: 'calendar', style: 'regular' })} size="10x" />
                 </Link>
                 <div>
                   <Link to="/generate">
@@ -23,7 +24,7 @@ function Index() {
             <div className="col-xs-4">
               <div className="navItem">
                 <Link to="/browse">
-                <FontAwesomeIcon icon={icon({name: 'list'})} size="10x"/>
+                  <FontAwesomeIcon icon={icon({ name: 'list' })} size="10x" />
                 </Link>
                 <div>
                   <Link to="/browse">
@@ -35,7 +36,7 @@ function Index() {
             <div className="col-xs-4">
               <div className="navItem">
                 <Link to="/search">
-                <FontAwesomeIcon icon={icon({name: 'search'})} size="10x"/>
+                  <FontAwesomeIcon icon={icon({ name: 'search' })} size="10x" />
                 </Link>
                 <div>
                   <Link to="/search">

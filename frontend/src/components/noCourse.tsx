@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import React from "react";
 
-function minutesToTime(mins) {
-  var h = Math.floor(mins / 60);
-  var m = mins % 60;
+function minutesToTime(mins: number) {
+  var h: number = Math.floor(mins / 60);
+  var m: string = `${mins % 60}`;
   var ampm = "am";
   if (h === 24) {
     h = 12;
@@ -14,14 +15,14 @@ function minutesToTime(mins) {
   if (h === 0) {
     h = 12;
   }
-  if (m < 10) {
+  if (mins % 60 < 10) {
     m = "0" + m;
   }
   return `${h}:${m} ${ampm}`;
 }
 
-const NonCourse = () => {
-  let times = [];
+const NoCourse = () => {
+  let times: Array<React.JSX.Element> = [];
   for (let min = 0; min <= 1440; min += 30) {
     times.push(
       <option label={minutesToTime(min)} value={`number:${min}`}>
@@ -31,25 +32,13 @@ const NonCourse = () => {
   }
   return (
     <div className="container row form-group repeat-item">
-      <div className="col-lg-2 col-md-12">
-        <div className="container-fluid">
-          <input
-            autocomplete="off"
-            id="nonCourses0"
-            className="form-control"
-            type="text"
-            name="nonCourses0"
-            placeholder="Title"
-          />
-        </div>
-      </div>
       <div className="hidden-lg vert-spacer-static-md"></div>
       <div className="col-lg-5 col-md-6 col-sm-6">
         <div className="row form-inline">
           <div className="col-xs-12">
             <div className="form-group inline-sm">
               <select id="options-startTime" className="form-control">
-                <option value="" className="" disabled selected="selected">
+                <option value="" className="" disabled selected={true}>
                   Start
                 </option>
                 {times}
@@ -58,7 +47,7 @@ const NonCourse = () => {
             <div className="form-group inline-sm">&nbsp;to&nbsp;</div>
             <div className="form-group inline-sm">
               <select id="options-endTime" className="form-control">
-                <option value="" className="" disabled selected="selected">
+                <option value="" className="" disabled selected={true}>
                   End
                 </option>
                 {times}
@@ -112,4 +101,4 @@ const NonCourse = () => {
   );
 };
 
-export default NonCourse;
+export default NoCourse;
